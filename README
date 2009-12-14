@@ -1,0 +1,23 @@
+This is gelfload, a portable runtime ELF loader. It lets you use ELF on
+platforms that don't natively support ELF!
+
+Some special properties of gelfload:
+
+ * To integrate gelfload well into platforms that /do/ support ELF, gelfload
+   ELF files should have their interpreter set to /usr/bin/gelfload-ld
+
+ * gelfload ELF files may refer to gelfload .so files by their standard name,
+   or they may use symbolic names to refer to host libraries:
+   * libhost_<name> refers to the library <name> on the host, e.g.
+     libhost_libc.so.6 or libhost_msvcrt.dll
+   * libhost_.so refers to:
+     * if possible, all libraries loaded by gelfload in the host, including
+       certainly at least libc
+     * otherwise, libc or the nearest equivalent, e.g. msvcrt.dll
+   * libloader_dl.0 refers to the loader's builtin library providing dlopen()
+     and dlsym()
+
+gelfload is still in development, and doesn't yet support all ELF relocations.
+Some tests are in test/. They're tested primarily on GNU/Linux, however the
+test named testdl uses only standard libc functions and should work on any host
+system (including e.g. Mac OS X).
