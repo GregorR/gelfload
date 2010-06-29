@@ -31,7 +31,7 @@ export LDFLAGS
 AC_LINK_IFELSE(AC_LANG_PROGRAM([], []), [], [
     # OK, try with --section-start. This test comes second because MingW allows
     # it, though it doesn't work
-    LDFLAGS="$ORIG_LDFLAGS -Wl,--section-start,.dynsym=0x18000000"
+    LDFLAGS="$ORIG_LDFLAGS -Wl,--section-start,.dynsym=0x19000000 -Wl,--section-start,.hash=0x18000000"
     export LDFLAGS
     AC_LINK_IFELSE(AC_LANG_PROGRAM([], []), [], [
         # Too bad, this can't be done
