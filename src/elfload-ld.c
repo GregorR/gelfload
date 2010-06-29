@@ -9,7 +9,7 @@ int main(int argc, char **argv)
     /* form our new arguments */
     newargs = alloca((argc + 2) * sizeof(char*));
     memcpy(newargs + 1, argv, (argc + 1) * sizeof(char*));
-    newargs[0] = "/usr/bin/gelfload"; /* FIXME */
+    newargs[0] = "/usr/bin/microcosm"; /* FIXME */
 
     /* then call */
     execv(newargs[0], newargs);

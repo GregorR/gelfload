@@ -106,6 +106,11 @@ struct ELF_File *loadELF(const char *nm)
         }
 
         return f;
+
+    } else if (strcmp(nm, "libmicrocosm.so") == 0) {
+        f->hostlib = HOSTLIB_MICROCOSM;
+        return f;
+
     }
 
     readFile(nm, f);
@@ -458,6 +463,9 @@ void *findELFSymbol(const char *nm, struct ELF_File *onlyin, int localin, int no
 
         } else if (f->hostlib == HOSTLIB_DL) {
             return elfload_dl(nm);
+
+        } else if (f->hostlib == HOSTLIB_MICROCOSM) {
+            return elfload_microcosm(nm);
 
         }
 

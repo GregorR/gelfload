@@ -15,7 +15,7 @@ int main(int argc, char **argv, char **envp)
     int i, envc;
 
     if (argc < 2) {
-        fprintf(stderr, "Use: elfload <elf file> [arguments]\n");
+        fprintf(stderr, "Use: microcosm <elf file> [arguments]\n");
         return 1;
     }
 
