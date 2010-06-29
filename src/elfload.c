@@ -343,6 +343,10 @@ struct ELF_File *loadELF(const char *nm)
                     break;
                 }
 
+                case R_X86_64_GLOB_DAT:
+                    WORD64_REL(REL_S + REL_A);
+                    break;
+
                 case R_X86_64_RELATIVE:
                     WORD64_REL(f->loc + REL_A);
                     break;
