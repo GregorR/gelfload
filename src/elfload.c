@@ -358,12 +358,15 @@ struct ELF_File *loadELF(const char *nm)
     }
 
     if (f->jmprel && f->symtab) {
-        ElfNative_Rel *currel = (ElfNative_Rel *) f->jmprel;
-        for (; (void *) currel < f->jmprel + f->jmprelsz; currel++) {
+        ElfNative_Rela *currel = (ElfNative_Rela *) f->jmprel;
+        for (; (void *) currel < (void *) f->jmprel + f->jmprelsz; currel++) {
             switch (ELFNATIVE_R_TYPE(currel->r_info)) {
                 case R_X86_64_JUMP_SLOT:
                     WORD64_REL(REL_S);
                     break;
+
+                default:
+                    fprintf(stderr, "Unsupported jmprel relocation %d\n", ELFNATIVE_R_TYPE(currel->r_info));
             }
         }
     }
