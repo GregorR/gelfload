@@ -229,7 +229,19 @@ struct ELF_File *loadELF(const char *nm)
             loadELF(f->strtab + curdyn->d_un.d_val);
         }
     }
+}
 
+void relocateELFs()
+{
+    int i;
+
+    for (i = 0; i < elfFileCount; i++) {
+        relocateELF(i, &(elfFiles[i]));
+    }
+}
+
+void relocateELF(int fileNo, struct ELF_File *f)
+{
     /* do processor-specific relocation */
 #if (defined(__i386__) || defined(__i386) || defined(_M_IX86) || defined(_X86_)) && \
     !(defined(__x86_64__) || defined(_M_X64))

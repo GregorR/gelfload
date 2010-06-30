@@ -61,6 +61,8 @@ struct ELF_File {
 };
 
 struct ELF_File *loadELF(const char *nm);
+void relocateELFs();
+void relocateELF(int fileNo, struct ELF_File *f);
 void initELF(struct ELF_File *except);
 void readFile(const char *nm, struct ELF_File *ef);
 void closeFile(struct ELF_File *ef);
