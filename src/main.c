@@ -22,6 +22,9 @@ int main(int argc, char **argv, char **envp)
     /* load them all in */
     f = loadELF(argv[1]);
 
+    /* relocate them */
+    relocateELFs();
+
     /* initialize .so files */
     initELF(f);
 
