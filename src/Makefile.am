@@ -2,7 +2,7 @@ bin_PROGRAMS = gelfload gelfload-ld
 lib_LIBRARIES = libgelfload.a
 include_HEADERS = elfload.h elfload_elf.h elfload_exec.h
 
-gelfload_SOURCES = main.c
+gelfload_SOURCES = main.c whereami.c
 gelfload_DEPENDENCIES = libgelfload.a
 gelfload_LDADD = libgelfload.a
 

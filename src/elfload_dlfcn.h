@@ -3,6 +3,8 @@
 #ifndef ELFLOAD_DLFCN_H
 #define ELFLOAD_DLFCN_H
 
+extern char *elfload_dlinstdir;
+
 void *elfload_dlopen(const char *filename, int flag);
 char *elfload_dlerror(void);
 void *elfload_dlsym(void *handle, const char *symbol);

@@ -3,12 +3,13 @@
 #include "elfload.h"
 #include "elfload_dlfcn.h"
 
+char *elfload_dlinstdir = NULL;
 char *dlLastError = NULL;
 
 void *elfload_dlopen(const char *filename, int flag)
 {
     /* pretty simple, just load based on the file name */
-    struct ELF_File *f = loadELF(filename);
+    struct ELF_File *f = loadELF(filename, elfload_dlinstdir);
     
     if (f == NULL) {
         dlLastError = "Could not find or load file.";
