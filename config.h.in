@@ -72,6 +72,9 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
+/* Install prefix */
+#undef PREFIX
+
 /* The number of bytes in type void * */
 #undef SIZEOF_VOID_P
 
