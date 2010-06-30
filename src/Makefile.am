@@ -2,7 +2,7 @@ bin_PROGRAMS = microcosm microcosm-ld
 noinst_LIBRARIES = libgelfload.a
 noinst_HEADERS = elfload.h elfload_elf.h elfload_exec.h
 
-microcosm_SOURCES = main.c
+microcosm_SOURCES = main.c whereami.c
 microcosm_DEPENDENCIES = libgelfload.a
 microcosm_LDADD = libgelfload.a
 

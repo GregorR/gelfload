@@ -59,7 +59,7 @@ am_libgelfload_a_OBJECTS = bbuffer.$(OBJEXT) elfload.$(OBJEXT) \
 libgelfload_a_OBJECTS = $(am_libgelfload_a_OBJECTS)
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_microcosm_OBJECTS = main.$(OBJEXT)
+am_microcosm_OBJECTS = main.$(OBJEXT) whereami.$(OBJEXT)
 microcosm_OBJECTS = $(am_microcosm_OBJECTS)
 am__DEPENDENCIES_1 =
 am_microcosm_ld_OBJECTS = elfload-ld.$(OBJEXT)
@@ -172,7 +172,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 noinst_LIBRARIES = libgelfload.a
 noinst_HEADERS = elfload.h elfload_elf.h elfload_exec.h
-microcosm_SOURCES = main.c
+microcosm_SOURCES = main.c whereami.c
 microcosm_DEPENDENCIES = libgelfload.a
 microcosm_LDADD = libgelfload.a $(am__append_1)
 microcosm_ld_SOURCES = elfload-ld.c
@@ -275,6 +275,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/elfload.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/microcosm.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/whereami.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

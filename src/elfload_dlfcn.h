@@ -5,6 +5,8 @@
 
 #include "elfload_microcosm.h"
 
+extern char *elfload_dlinstdir;
+
 MICROCOSM_CALLING_CONVENTION(void *elfload_dlopen(const char *filename, int flag));
 MICROCOSM_CALLING_CONVENTION(char *elfload_dlerror(void));
 MICROCOSM_CALLING_CONVENTION(void *elfload_dlsym(void *handle, const char *symbol));

@@ -38,7 +38,7 @@ struct ELF_File elfFiles[MAX_ELF_FILES];
 int elfFileCount = 0;
 
 /* The function to actually load ELF files into memory */
-struct ELF_File *loadELF(const char *nm)
+struct ELF_File *loadELF(const char *nm, const char *instdir)
 {
     int i, fileNo, phdri;
     struct ELF_File *f;
@@ -113,7 +113,7 @@ struct ELF_File *loadELF(const char *nm)
 
     }
 
-    readFile(nm, f);
+    readFile(nm, instdir, f);
 
     /* make sure it's an ELF file */
     f->ehdr = (ElfNative_Ehdr *) f->prog;
@@ -231,9 +231,11 @@ struct ELF_File *loadELF(const char *nm)
     /* load in dependencies */
     for (curdyn = f->dynamic; curdyn && curdyn->d_tag != DT_NULL; curdyn++) {
         if (curdyn->d_tag == DT_NEEDED) {
-            loadELF(f->strtab + curdyn->d_un.d_val);
+            loadELF(f->strtab + curdyn->d_un.d_val, instdir);
         }
     }
+
+    return f;
 }
 
 void relocateELFs()
@@ -392,8 +394,6 @@ void relocateELF(int fileNo, struct ELF_File *f)
 #else
 #error Unsupported architecture.
 #endif
-
-    return f;
 }
 
 /* Initialize every ELF loaded /except/ for f (usually the binary) */
@@ -536,7 +536,7 @@ ElfNative_Word elf_hash(const unsigned char *name)
 }
 
 /* A handy function to read a file or mmap it, as appropriate */
-void readFile(const char *nm, struct ELF_File *ef)
+void readFile(const char *nm, const char *instdir, struct ELF_File *ef)
 {
 #ifdef HAVE_MMAP
     void *buf;
@@ -546,8 +546,20 @@ void readFile(const char *nm, struct ELF_File *ef)
     /* use mmap. First, open the file and get its length */
     fd = open(nm, O_RDONLY);
     if (fd == -1) {
-        perror(nm);
-        exit(1);
+        /* try with instdir */
+        char *longnm = malloc(strlen(nm) + strlen(instdir) + 19);
+        if (longnm == NULL) {
+            perror("malloc");
+            exit(1);
+        }
+        sprintf(longnm, "%s/../lib/microcosm/%s", instdir, nm);
+        fd = open(longnm, O_RDONLY);
+        free(longnm);
+
+        if (fd == -1) {
+            perror(nm);
+            exit(1);
+        }
     }
     if (fstat(fd, &sbuf) < 0) {
         perror(nm);

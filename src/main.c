@@ -6,21 +6,27 @@
 #endif
 
 #include "elfload.h"
+#include "elfload_dlfcn.h"
 #include "elfload_exec.h"
+#include "whereami.h"
 
 int main(int argc, char **argv, char **envp)
 {
     struct ELF_File *f;
     void **newstack;
     int i, envc;
+    char *dir, *fil;
 
     if (argc < 2) {
         fprintf(stderr, "Use: microcosm <elf file> [arguments]\n");
         return 1;
     }
 
+    whereAmI(argv[0], &dir, &fil);
+    elfload_dlinstdir = dir;
+
     /* load them all in */
-    f = loadELF(argv[1]);
+    f = loadELF(argv[1], dir);
 
     /* relocate them */
     relocateELFs();
