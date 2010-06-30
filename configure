@@ -4888,6 +4888,13 @@ fi
 done
 
 
+# Prefix for elfload-ld.c to know where the main program is:
+
+cat >>confdefs.h <<_ACEOF
+#define PREFIX "$prefix"
+_ACEOF
+
+
 ac_config_files="$ac_config_files Makefile src/Makefile"
 
 cat >confcache <<\_ACEOF

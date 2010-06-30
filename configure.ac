@@ -62,6 +62,9 @@ AC_FUNC_MEMCMP
 AC_FUNC_MMAP
 AC_CHECK_FUNCS([memset strdup])
 
+# Prefix for elfload-ld.c to know where the main program is:
+AC_DEFINE_UNQUOTED([PREFIX], ["$prefix"], [Install prefix])
+
 AC_CONFIG_FILES([Makefile
                  src/Makefile])
 AC_OUTPUT
