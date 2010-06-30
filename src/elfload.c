@@ -433,6 +433,7 @@ void *findELFSymbol(const char *nm, struct ELF_File *onlyin, int localin, int no
 #if defined(HAVE_DLFCN_H)
             hostsym = dlsym(f->prog, nm);
             if (hostsym) return hostsym;
+            continue;
 #elif defined(__WIN32)
             char csym[1024];
             int isimp = 0;
@@ -469,10 +470,14 @@ void *findELFSymbol(const char *nm, struct ELF_File *onlyin, int localin, int no
             continue;
 
         } else if (f->hostlib == HOSTLIB_DL) {
-            return elfload_dl(nm);
+           hostsym = elfload_dl(nm);
+           if (hostsym) return hostsym;
+           continue;
 
         } else if (f->hostlib == HOSTLIB_MICROCOSM) {
-            return elfload_microcosm(nm);
+            hostsym = elfload_microcosm(nm);
+            if (hostsym) return hostsym;
+            continue;
 
         }
 

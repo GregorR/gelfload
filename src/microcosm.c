@@ -16,6 +16,8 @@ void *elfload_microcosm(const char *fname)
     } else if (strcmp(fname, "microcosm_register_syscall") == 0) {
         return (void *) microcosm_register_syscall;
     }
+
+    return NULL;
 }
 
 /* the microcosm syscalls */
