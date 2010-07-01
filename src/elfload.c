@@ -290,6 +290,10 @@ void relocateELF(int fileNo, struct ELF_File *f)
                     break;
                 }
 
+                case R_386_GLOB_DAT:
+                    WORD32_REL(REL_S + REL_A);
+                    break;
+
                 case R_386_RELATIVE:
                     WORD32_REL(f->loc + REL_A);
                     break;
