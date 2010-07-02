@@ -435,6 +435,7 @@ void *findELFSymbol(const char *nm, struct ELF_File *onlyin, int localin, int no
     ElfNative_Word bucket, index;
     ElfNative_Sym *sym;
     void *hostsym;
+    if (syminto) *syminto = NULL;
 
     if (nm[0] == '\0') return NULL;
 
