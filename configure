@@ -4612,6 +4612,10 @@ _ACEOF
 # -static
 ORIG_LDFLAGS="$LDFLAGS"
 LDFLAGS="$LDFLAGS -static"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+int main(void) {return 0;}
+_ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
 
     HAVE_STATIC=yes
@@ -4622,7 +4626,7 @@ else
 
 fi
 rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext
+    conftest$ac_exeext conftest.$ac_ext
 LDFLAGS="$ORIG_LDFLAGS"
  if test x$HAVE_STATIC = xyes; then
   HAVE_STATIC_TRUE=
