@@ -58,7 +58,7 @@ AC_COMPILE_CHECK_SIZEOF([void *])
 # -static
 ORIG_LDFLAGS="$LDFLAGS"
 LDFLAGS="$LDFLAGS -static"
-AC_LINK_IFELSE([], [
+AC_LINK_IFELSE([int main(void) {return 0;}], [
     HAVE_STATIC=yes
 ], [
     HAVE_STATIC=no
