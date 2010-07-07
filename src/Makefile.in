@@ -198,7 +198,7 @@ gelfload_SOURCES = main.c whereami.c
 gelfload_DEPENDENCIES = libgelfload.a
 gelfload_LDADD = libgelfload.a $(am__append_1)
 gelfload_ld_SOURCES = elfload-ld.c
-gelfload_ld_LDFLAGS = -static
+@HAVE_STATIC_TRUE@gelfload_ld_LDFLAGS = -static
 libgelfload_a_SOURCES = bbuffer.c elfload.c dlfcn.c
 all: all-am
 

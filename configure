@@ -599,6 +599,8 @@ ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
+HAVE_STATIC_FALSE
+HAVE_STATIC_TRUE
 EGREP
 GREP
 CPP
@@ -4607,6 +4609,30 @@ _ACEOF
 
 
 
+# -static
+ORIG_LDFLAGS="$LDFLAGS"
+LDFLAGS="$LDFLAGS -static"
+if ac_fn_c_try_link "$LINENO"; then :
+
+    HAVE_STATIC=yes
+
+else
+
+    HAVE_STATIC=no
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext
+LDFLAGS="$ORIG_LDFLAGS"
+ if test x$HAVE_STATIC = xyes; then
+  HAVE_STATIC_TRUE=
+  HAVE_STATIC_FALSE='#'
+else
+  HAVE_STATIC_TRUE='#'
+  HAVE_STATIC_FALSE=
+fi
+
+
 # Checks for library functions.
 #AC_FUNC_ALLOCA
 #AC_FUNC_MALLOC
@@ -5012,6 +5038,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${HAVE_LIBDL_TRUE}" && test -z "${HAVE_LIBDL_FALSE}"; then
   as_fn_error "conditional \"HAVE_LIBDL\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${HAVE_STATIC_TRUE}" && test -z "${HAVE_STATIC_FALSE}"; then
+  as_fn_error "conditional \"HAVE_STATIC\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 

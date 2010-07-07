@@ -7,7 +7,9 @@ gelfload_DEPENDENCIES = libgelfload.a
 gelfload_LDADD = libgelfload.a
 
 gelfload_ld_SOURCES = elfload-ld.c
-gelfload_ld_LDFLAGS = -static
+if HAVE_STATIC
+    gelfload_ld_LDFLAGS = -static
+endif
 
 if HAVE_LIBDL
     gelfload_LDADD += -ldl
