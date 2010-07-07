@@ -176,7 +176,7 @@ microcosm_SOURCES = main.c whereami.c
 microcosm_DEPENDENCIES = libgelfload.a
 microcosm_LDADD = libgelfload.a $(am__append_1)
 microcosm_ld_SOURCES = elfload-ld.c
-microcosm_ld_LDFLAGS = -static
+@HAVE_STATIC_TRUE@microcosm_ld_LDFLAGS = -static
 libgelfload_a_SOURCES = bbuffer.c elfload.c dlfcn.c microcosm.c
 all: all-am
 

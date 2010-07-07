@@ -7,7 +7,9 @@ microcosm_DEPENDENCIES = libgelfload.a
 microcosm_LDADD = libgelfload.a
 
 microcosm_ld_SOURCES = elfload-ld.c
-microcosm_ld_LDFLAGS = -static
+if HAVE_STATIC
+    microcosm_ld_LDFLAGS = -static
+endif
 
 if HAVE_LIBDL
     microcosm_LDADD += -ldl
