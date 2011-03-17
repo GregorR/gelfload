@@ -299,7 +299,7 @@ void relocateELF(int fileNo, struct ELF_File *f)
                     break;
 
                 default:
-                    fprintf(stderr, "Unsupported relocation %d\n", ELFNATIVE_R_TYPE(currel->r_info));
+                    fprintf(stderr, "Unsupported relocation %d in %s\n", ELFNATIVE_R_TYPE(currel->r_info), f->nm);
             }
         }
     }
@@ -370,7 +370,7 @@ void relocateELF(int fileNo, struct ELF_File *f)
                     break;
 
                 default:
-                    fprintf(stderr, "Unsupported relocation %d\n", ELFNATIVE_R_TYPE(currel->r_info));
+                    fprintf(stderr, "Unsupported relocation %d in %s\n", (int) ELFNATIVE_R_TYPE(currel->r_info), f->nm);
             }
         }
     }
@@ -384,7 +384,7 @@ void relocateELF(int fileNo, struct ELF_File *f)
                     break;
 
                 default:
-                    fprintf(stderr, "Unsupported jmprel relocation %d\n", ELFNATIVE_R_TYPE(currel->r_info));
+                    fprintf(stderr, "Unsupported jmprel relocation %d in %s\n", (int) ELFNATIVE_R_TYPE(currel->r_info), f->nm);
             }
         }
     }
