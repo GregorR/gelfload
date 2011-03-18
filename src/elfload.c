@@ -533,7 +533,16 @@ ElfNative_Word elf_hash(const unsigned char *name)
 /* A handy function to read a file or mmap it, as appropriate */
 void readFile(const char *nm, const char *instdir, struct ELF_File *ef)
 {
+    /* try with instdir */
+    char *longnm = malloc(strlen(nm) + strlen(instdir) + 18);
+    if (longnm == NULL) {
+        perror("malloc");
+        exit(1);
+    }
+    sprintf(longnm, "%s/../lib/gelfload/%s", instdir, nm);
+
 #ifdef HAVE_MMAP
+{
     void *buf;
     struct stat sbuf;
     int fd;
@@ -541,21 +550,14 @@ void readFile(const char *nm, const char *instdir, struct ELF_File *ef)
     /* use mmap. First, open the file and get its length */
     fd = open(nm, O_RDONLY);
     if (fd == -1) {
-        /* try with instdir */
-        char *longnm = malloc(strlen(nm) + strlen(instdir) + 18);
-        if (longnm == NULL) {
-            perror("malloc");
-            exit(1);
-        }
-        sprintf(longnm, "%s/../lib/gelfload/%s", instdir, nm);
         fd = open(longnm, O_RDONLY);
-        free(longnm);
 
         if (fd == -1) {
             perror(nm);
             exit(1);
         }
     }
+    free(longnm);
     if (fstat(fd, &sbuf) < 0) {
         perror(nm);
         exit(1);
@@ -573,8 +575,9 @@ void readFile(const char *nm, const char *instdir, struct ELF_File *ef)
     /* and put it in ef */
     ef->prog = buf;
     ef->proglen = sbuf.st_size;
-
+}
 #else
+{
     char *buf;
     int bufsz, rdtotal, rd;
     FILE *f;
@@ -582,9 +585,14 @@ void readFile(const char *nm, const char *instdir, struct ELF_File *ef)
     /* OK, use stdio */
     f = fopen(nm, "rb");
     if (f == NULL) {
-        perror(nm);
-        exit(1);
+        f = fopen(longnm, "rb");
+
+        if (f == NULL) {
+            perror(nm);
+            exit(1);
+        }
     }
+    free(longnm);
     
     /* start with a 512-byte buffer */
     bufsz = 512;
@@ -620,7 +628,7 @@ void readFile(const char *nm, const char *instdir, struct ELF_File *ef)
     /* now put it in ef */
     ef->prog = buf;
     ef->proglen = rdtotal;
-
+}
 #endif
 }
 
