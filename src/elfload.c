@@ -384,14 +384,16 @@ void relocateELF(int fileNo, struct ELF_File *f)
                             NULL, -1, fileNo, &sosym);
 
                     /* OK, we should have both, so copy it over */
-                    if (localsym && sosym) {
-                        memcpy((void *) (localsym->st_value + f->offset),
-                               soptr, sosym->st_size);
-                    } else {
-                        /* depend on localsym's size */
-                        memcpy((void *) (localsym->st_value + f->offset),
-                               soptr, localsym->st_size);
+                    if (soptr) {
+                        if (localsym && sosym) {
+                            memcpy((void *) (localsym->st_value + f->offset),
+                                    soptr, sosym->st_size);
+                        } else {
+                            /* depend on localsym's size */
+                            memcpy((void *) (localsym->st_value + f->offset),
+                                    soptr, localsym->st_size);
 
+                        }
                     }
 
                     break;
