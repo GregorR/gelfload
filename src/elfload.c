@@ -11,6 +11,7 @@
 #include <unistd.h>
 
 #include "bbuffer.h"
+#include "findlibrary.h"
 
 #include "../config.h"
 
@@ -57,9 +58,30 @@ struct ELF_File *loadELF(const char *nm, const char *instdir)
     memset(f, 0, sizeof(struct ELF_File));
     elfFileCount++;
     f->nm = strdup(nm);
+    if (f->nm == NULL) {
+        perror("strdup");
+        exit(1);
+    }
 
     /* if this is a host library, circumvent all the ELF stuff and go straight for the host */
-    if (strncmp(nm, "libhost_", 8) == 0) {
+    if (strncmp(nm, "libhost_", 8) == 0 || strncmp(nm, "libmetahost_", 12) == 0) {
+        char *usenm;
+
+        /* attempt to cleverly find a library */
+        if (strncmp(nm, "libmetahost_", 12) == 0) {
+            usenm = findLibrary(nm + 12);
+            if (usenm == NULL) {
+                fprintf(stderr, "Could not resolve approximate host library %s.\n", nm + 12);
+                exit(1);
+            }
+        } else {
+            usenm = strdup(nm + 8);
+            if (usenm == NULL) {
+                perror("strdup");
+                exit(1);
+            }
+        }
+
         f->hostlib = HOSTLIB_HOST;
 #if defined(HAVE_DLFCN_H)
         if (strcmp(nm, "libhost_.so") == 0) {
@@ -70,7 +92,7 @@ struct ELF_File *loadELF(const char *nm, const char *instdir)
             f->prog = dlopen(NULL, RTLD_NOW|RTLD_GLOBAL);
 #endif
         } else {
-            f->prog = dlopen(nm + 8, RTLD_NOW|RTLD_GLOBAL);
+            f->prog = dlopen(usenm, RTLD_NOW|RTLD_GLOBAL);
 
             if (f->prog == NULL) {
                 fprintf(stderr, "Could not resolve host library %s.\n", nm + 8);
@@ -81,7 +103,7 @@ struct ELF_File *loadELF(const char *nm, const char *instdir)
         if (strcmp(nm, "libhost_.so") == 0) {
             f->prog = LoadLibrary("msvcrt.dll");
         } else {
-            f->prog = LoadLibrary(nm + 8);
+            f->prog = LoadLibrary(usenm);
         }
         if (f->prog == NULL) {
             fprintf(stderr, "Could not resolve host library %s.\n", nm + 8);
@@ -92,6 +114,7 @@ struct ELF_File *loadELF(const char *nm, const char *instdir)
                 nm + 8);
         exit(1);
 #endif
+        free(usenm);
         return f;
 
     } else if (strncmp(nm, "libloader_", 10) == 0) {
@@ -110,12 +133,12 @@ struct ELF_File *loadELF(const char *nm, const char *instdir)
 
     if (!readFile(nm, instdir, f)) {
         /* failed to read it, retry as a libhost_ */
-        char *newnm = malloc(strlen(nm) + 9);
+        char *newnm = malloc(strlen(nm) + 13);
         if (newnm == NULL) {
             perror("malloc");
             exit(1);
         }
-        sprintf(newnm, "libhost_%s", nm);
+        sprintf(newnm, "libmetahost_%s", nm);
         free(f->nm);
         elfFileCount--;
         f = loadELF(newnm, instdir);

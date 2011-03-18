@@ -15,4 +15,4 @@ if HAVE_LIBDL
     gelfload_LDADD += -ldl
 endif
 
-libgelfload_a_SOURCES = bbuffer.c elfload.c dlfcn.c
+libgelfload_a_SOURCES = bbuffer.c elfload.c dlfcn.c findlibrary.c
