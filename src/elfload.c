@@ -108,7 +108,20 @@ struct ELF_File *loadELF(const char *nm, const char *instdir)
         return f;
     }
 
-    readFile(nm, instdir, f);
+    if (!readFile(nm, instdir, f)) {
+        /* failed to read it, retry as a libhost_ */
+        char *newnm = malloc(strlen(nm) + 9);
+        if (newnm == NULL) {
+            perror("malloc");
+            exit(1);
+        }
+        sprintf(newnm, "libhost_%s", nm);
+        free(f->nm);
+        elfFileCount--;
+        f = loadELF(newnm, instdir);
+        free(newnm);
+        return f;
+    }
 
     /* make sure it's an ELF file */
     f->ehdr = (ElfNative_Ehdr *) f->prog;
@@ -531,7 +544,7 @@ ElfNative_Word elf_hash(const unsigned char *name)
 }
 
 /* A handy function to read a file or mmap it, as appropriate */
-void readFile(const char *nm, const char *instdir, struct ELF_File *ef)
+void *readFile(const char *nm, const char *instdir, struct ELF_File *ef)
 {
     /* try with instdir */
     char *longnm = malloc(strlen(nm) + strlen(instdir) + 18);
@@ -553,8 +566,7 @@ void readFile(const char *nm, const char *instdir, struct ELF_File *ef)
         fd = open(longnm, O_RDONLY);
 
         if (fd == -1) {
-            perror(nm);
-            exit(1);
+            return NULL;
         }
     }
     free(longnm);
@@ -588,8 +600,7 @@ void readFile(const char *nm, const char *instdir, struct ELF_File *ef)
         f = fopen(longnm, "rb");
 
         if (f == NULL) {
-            perror(nm);
-            exit(1);
+            return NULL;
         }
     }
     free(longnm);
@@ -630,6 +641,8 @@ void readFile(const char *nm, const char *instdir, struct ELF_File *ef)
     ef->proglen = rdtotal;
 }
 #endif
+
+    return ef->prog;
 }
 
 /* The finalization function for readFile */
