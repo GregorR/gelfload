@@ -26,9 +26,6 @@ int main(int argc, char **argv, char **envp)
     whereAmI(argv[0], &dir, &fil);
     elfload_dlinstdir = dir;
 
-    /* load them all in */
-    f = loadELF(argv[1], dir);
-
     /* load in generishims if applicable */
     generishims = malloc(strlen(dir) + 64);
     if (generishims == NULL) {
@@ -40,6 +37,9 @@ int main(int argc, char **argv, char **envp)
         loadELF(generishims, dir);
     }
     free(generishims);
+
+    /* load them all in */
+    f = loadELF(argv[1], dir);
 
     /* relocate them */
     relocateELFs();

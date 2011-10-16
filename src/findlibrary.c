@@ -54,7 +54,18 @@ char *findLibrary(const char *metanm)
         *foundlib = '\0';
     }
 
+    /* some hardwired alternates */
+    if (foundlib == NULL) {
+        if (!strncmp(metanm, "libintl.so.", 11) ||
+            !strncmp(metanm, "libiconv.so.", 12) ||
+            !strncmp(metanm, "libsocket.so.", 13)) {
+            /* snag it from libc */
+            foundlib = findLibrary("libc.so");
+        }
+    }
+
     free(metanmd);
+    if (foundlib) fprintf(stderr, "Found %s for %s\n", foundlib, metanm);
     return foundlib;
 }
 
