@@ -1,0 +1,6 @@
+SCFLAGS=-fPIC
+SLDFLAGS=-shared
+SONAME=libgelfload-gelfshims-$(TARGET).so.0
+SONAMEFLAGS=-Wl,-soname,$(SONAME)
+
+include ../common/Makefile.common

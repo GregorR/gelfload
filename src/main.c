@@ -16,7 +16,7 @@ int main(int argc, char **argv, char **envp)
     struct ELF_File *f;
     void **newstack;
     int i, envc;
-    char *dir, *fil, *generishims;
+    char *dir, *fil, *gelfshims;
 
     if (argc < 2) {
         fprintf(stderr, "Use: elfload <elf file> [arguments]\n");
@@ -26,17 +26,18 @@ int main(int argc, char **argv, char **envp)
     whereAmI(argv[0], &dir, &fil);
     elfload_dlinstdir = dir;
 
-    /* load in generishims if applicable */
-    generishims = malloc(strlen(dir) + 64);
-    if (generishims == NULL) {
+    /* load in gelfshims if applicable */
+    gelfshims = malloc(strlen(dir) + 1024);
+    if (gelfshims == NULL) {
         perror("malloc");
         exit(1);
     }
-    sprintf(generishims, "libhost_%s/../lib/gelfload/libgelfload-generishims.so.0", dir);
-    if (access(generishims + 8, F_OK) == 0) {
-        loadELF(generishims, dir);
+    sprintf(gelfshims, "libhost_%s/../lib/gelfload/libgelfload-gelfshims-linux-gnu-libc6.so.0", dir);
+    if (access(gelfshims + 8, F_OK) == 0) {
+        fprintf(stderr, "Loading gelfshims from %s\n", gelfshims);
+        loadELF(gelfshims, dir);
     }
-    free(generishims);
+    free(gelfshims);
 
     /* load them all in */
     f = loadELF(argv[1], dir);
