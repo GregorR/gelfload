@@ -470,7 +470,7 @@ void *findELFSymbol(const char *nm, struct ELF_File *onlyin, int localin, int no
     if (syminto) *syminto = NULL;
 
     if (nm[0] == '\0') return NULL;
-    fprintf(stderr, " %s\n", nm);
+    /*fprintf(stderr, " %s\n", nm);*/
 
     for (i = 0; i < elfFileCount; i++) {
         if (i == notin) continue;
@@ -609,7 +609,7 @@ void *readFile(const char *nm, const char *instdir, struct ELF_File *ef)
 
     /* then mmap it */
     buf = mmap(NULL, sbuf.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
-    if (buf == NULL) {
+    if (buf == MAP_FAILED) {
         perror("mmap");
         exit(1);
     }

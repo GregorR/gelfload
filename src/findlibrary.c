@@ -77,7 +77,7 @@ char *globLibrary(char *buf, const char *dir, const char *base)
     glob_t pglob;
     int globr;
 
-    sprintf(buf, "%slib%s*", dir, base);
+    sprintf(buf, "%slib%s.*", dir, base);
 
     /* now try to glob */
     globr = glob(buf, 0, NULL, &pglob);

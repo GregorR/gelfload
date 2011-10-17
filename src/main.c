@@ -60,10 +60,17 @@ int main(int argc, char **argv, char **envp)
         f = loadELF(gelfshims, dir);
         f->hostlib = HOSTLIB_SHIM;
     }
-    free(gelfshims);
 
     /* load them all in */
     f = loadELF(elff, dir);
+
+    /* load native gelfshims */
+    sprintf(gelfshims, "%s/../lib/gelfload/libgelfload-native-gelfshims-%s.so.0", dir, shimtarget);
+    if (access(gelfshims + 8, F_OK) == 0) {
+        fprintf(stderr, "Loading native gelfshims from %s\n", gelfshims);
+        f = loadELF(gelfshims, dir);
+    }
+    free(gelfshims);
 
     /* relocate them */
     relocateELFs();

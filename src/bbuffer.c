@@ -11,7 +11,7 @@
 
 /* mmap-based is the easiest */
 void *bbuffer(void *loc, size_t sz) {
-    void *ret;
+    void *ret = MAP_FAILED;
 
     /* switch on fixed-ness */
     if (loc) {
@@ -25,12 +25,14 @@ void *bbuffer(void *loc, size_t sz) {
 
         ret = mmap(loc, sz, PROT_EXEC|PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON|MAP_FIXED,
                    -1, 0);
-    } else {
+    }
+
+    if (ret == MAP_FAILED) {
         ret = mmap(NULL, sz, PROT_EXEC|PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON,
                    -1, 0);
     }
 
-    if (ret == NULL) {
+    if (ret == MAP_FAILED) {
         perror("mmap");
         exit(1);
     }
