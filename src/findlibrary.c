@@ -58,7 +58,8 @@ char *findLibrary(const char *metanm)
     if (foundlib == NULL) {
         if (!strncmp(metanm, "libintl.so.", 11) ||
             !strncmp(metanm, "libiconv.so.", 12) ||
-            !strncmp(metanm, "libsocket.so.", 13)) {
+            !strncmp(metanm, "libsocket.so.", 13) ||
+            !strncmp(metanm, "libgen.so.", 10)) {
             /* snag it from libc */
             foundlib = findLibrary("libc.so");
         }

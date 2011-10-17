@@ -7,6 +7,9 @@
 /* make this function a constructor (GCC-only for now) */
 #define CONSTRUCTOR(f) __attribute__((constructor)) f
 
+/* make an alias for a symbol (GCC-only for now) */
+#define ALIAS(a, r) void a __attribute__((alias(#r)));
+
 /* make an unimplemented shim */
 #define UNIMPL_SHIM(nm) int SHIM(nm)() { fprintf(stderr, "Shim unimplemented: %s\n", #nm); return 0; }
 
