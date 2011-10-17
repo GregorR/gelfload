@@ -470,6 +470,9 @@ void *findELFSymbol(const char *nm, struct ELF_File *onlyin, int localin, int no
     if (syminto) *syminto = NULL;
 
     if (nm[0] == '\0') return NULL;
+    if (!strcmp(nm, "__iob")) {
+        fprintf(stderr, "iob\n");
+    }
 
     for (i = 0; i < elfFileCount; i++) {
         if (i == notin) continue;
@@ -478,9 +481,16 @@ void *findELFSymbol(const char *nm, struct ELF_File *onlyin, int localin, int no
         if (onlyin && f != onlyin) continue;
 
         /* if this is a host library, just try the host method */
-        if (f->hostlib == HOSTLIB_HOST) {
+        if (f->hostlib == HOSTLIB_HOST || f->hostlib == HOSTLIB_SHIM) {
+            char *rnm = (char *) nm;
+            if (f->hostlib == HOSTLIB_SHIM) {
+                /* shim the name */
+                rnm = alloca(strlen(nm) + 17);
+                sprintf(rnm, "__gelfload_shim_%s", nm);
+            }
+
 #if defined(HAVE_DLFCN_H)
-            hostsym = dlsym(f->prog, nm);
+            hostsym = dlsym(f->prog, rnm);
             if (hostsym) return hostsym;
             continue;
 #elif defined(__WIN32)
@@ -488,16 +498,16 @@ void *findELFSymbol(const char *nm, struct ELF_File *onlyin, int localin, int no
             int isimp = 0;
 
             /* Remove _imp__ if it's present */
-            if (strncmp(nm, "_imp__", 6) == 0) {
+            if (strncmp(rnm, "_imp__", 6) == 0) {
                 isimp = 1;
-                nm += 6;
+                rnm += 6;
             }
 
             /* Try adding a _ first, to get the cdecl version */
-            snprintf(csym, 1024, "_%s", nm);
+            snprintf(csym, 1024, "_%s", rnm);
             hostsym = GetProcAddress(f->prog, csym);
             if (hostsym == NULL) {
-                hostsym = GetProcAddress(f->prog, nm);
+                hostsym = GetProcAddress(f->prog, rnm);
             }
             if (hostsym) {
                 if (isimp) {

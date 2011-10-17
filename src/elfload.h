@@ -7,13 +7,14 @@
 
 #define HOSTLIB_NOT  0
 #define HOSTLIB_HOST 1
-#define HOSTLIB_DL   2
+#define HOSTLIB_SHIM 2
+#define HOSTLIB_DL   3
 
 /* Basic structure for ELF files mid-load */
 struct ELF_File {
     char *nm;
 
-    /* if this is actually a host library, this is set to 1 */
+    /* if this is actually a host library, this is set */
     char hostlib;
 
     /* the complete program, in memory */

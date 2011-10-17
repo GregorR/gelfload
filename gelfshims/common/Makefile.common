@@ -1,19 +1,23 @@
 CC=gcc
-CFLAGS=$(SCFLAGS) -O2 -g
+CFLAGS=$(SCFLAGS) -O2 -g -I../common
 PREFIX=/usr
+COBJS=cdirect.o cshstdio.o
 
 all: $(SONAME)
 
-$(SONAME): $(OBJS)
-	$(CC) $(CFLAGS) $(SCFLAGS) $(SLDFLAGS) $(SONAMEFLAGS) $(OBJS) -o $(SONAME)
+$(SONAME): $(COBJS) $(OBJS)
+	$(CC) $(CFLAGS) $(SCFLAGS) $(SLDFLAGS) $(SONAMEFLAGS) $(COBJS) $(OBJS) -o $(SONAME)
 
 .SUFFIXES: .c .o
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $<
 
+%.o: ../common/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
 clean:
-	rm -f $(SONAME) $(OBJS)
+	rm -f $(SONAME) $(COBJS) $(OBJS)
 
 install:
 	install -D $(SONAME) $(PREFIX)/lib/gelfload/$(SONAME)

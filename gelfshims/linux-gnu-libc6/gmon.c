@@ -1,2 +1,4 @@
+#include "shim.h"
+
 /* don't need a fancy shim */
-void __gmon_start__() {}
+void SHIM(__gmon_start__)() {}
