@@ -26,3 +26,11 @@ int SHIM(fputs_unlocked)(const char *a, TSHIM(FILE) *b)
     TSHIM_T2H(FILE)(&hb, &b);
     return fputs(a, hb);
 }
+
+/* __overflow is a funny name for fputc_unlocked */
+int SHIM(__overflow)(TSHIM(FILE) *a, int b)
+{
+    FILE *ha = NULL;
+    TSHIM_T2H(FILE)(&ha, &a);
+    return fputc(b, ha);
+}

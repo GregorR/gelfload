@@ -66,7 +66,7 @@ int main(int argc, char **argv, char **envp)
 
     /* load native gelfshims */
     sprintf(gelfshims, "%s/../lib/gelfload/libgelfload-native-gelfshims-%s.so.0", dir, shimtarget);
-    if (access(gelfshims + 8, F_OK) == 0) {
+    if (access(gelfshims, F_OK) == 0) {
         fprintf(stderr, "Loading native gelfshims from %s\n", gelfshims);
         f = loadELF(gelfshims, dir);
     }
