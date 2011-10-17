@@ -470,9 +470,7 @@ void *findELFSymbol(const char *nm, struct ELF_File *onlyin, int localin, int no
     if (syminto) *syminto = NULL;
 
     if (nm[0] == '\0') return NULL;
-    if (!strcmp(nm, "__iob")) {
-        fprintf(stderr, "iob\n");
-    }
+    fprintf(stderr, " %s\n", nm);
 
     for (i = 0; i < elfFileCount; i++) {
         if (i == notin) continue;

@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=$(SCFLAGS) -O2 -g -I../common
+CFLAGS=$(SCFLAGS) -O2 -g -I. -I../common
 PREFIX=/usr
 COBJS=cdirect.o cshstdio.o
 

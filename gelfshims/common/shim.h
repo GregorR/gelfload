@@ -26,10 +26,18 @@
 
 /* target->host conversion */
 #define TSHIM_T2H(nm) __gelfload_tshim_t2h_ ## nm
-#define TSHIM_T2H_D(nm) void TSHIM_T2H(nm)(TSHIM(nm) **t, nm **h)
+#define TSHIM_T2H_D(nm) void TSHIM_T2H(nm)(nm **h, TSHIM(nm) **t)
+
+/* run after target->host conversion */
+#define TSHIM_T2HP(nm) __gelfload_tshim_t2hp_ ## nm
+#define TSHIM_T2HP_D(nm) void TSHIM_T2HP(nm)(nm **h)
 
 /* host->target conversion */
 #define TSHIM_H2T(nm) __gelfload_tshim_h2t_ ## nm
-#define TSHIM_H2T_D(nm) void TSHIM_H2T(nm)(nm **h, TSHIM(nm) **t)
+#define TSHIM_H2T_D(nm) void TSHIM_H2T(nm)(TSHIM(nm) **t, nm **h)
+
+/* run after target->host conversion */
+#define TSHIM_H2TP(nm) __gelfload_tshim_h2tp_ ## nm
+#define TSHIM_H2TP_D(nm) void TSHIM_H2TP(nm)(TSHIM(nm) **h)
 
 #endif

@@ -1,0 +1,2 @@
+#define REDIRECT_ATEXIT
+#define REDIRECT_FPUTS

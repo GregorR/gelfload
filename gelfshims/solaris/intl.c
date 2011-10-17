@@ -5,3 +5,4 @@
 char *SHIM(libintl_bindtextdomain)(const char *a, const char *b) { return bindtextdomain(a, b); }
 char *SHIM(libintl_gettext)(const char *a) { return gettext(a); }
 char *SHIM(libintl_textdomain)(const char *a) { return textdomain(a); }
+char *SHIM(libintl_ngettext)(const char *a, const char *b, unsigned long int c) { return ngettext(a, b, c); }
