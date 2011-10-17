@@ -36,9 +36,13 @@ int SHIM(fflush)(TSHIM(FILE) *a)
 
 size_t SHIM(__fpending)(TSHIM(FILE) *a)
 {
+#ifdef __GLIBC__
     FILE *ha = NULL;
     TSHIM_T2H(FILE)(&ha, &a);
     return __fpending(ha);
+#else
+    return 0;
+#endif
 }
 
 int SHIM(fclose)(TSHIM(FILE) *a)

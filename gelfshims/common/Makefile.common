@@ -1,3 +1,9 @@
+ifeq ($(shell uname),Darwin)
+    include ../common/Makefile.macho
+else
+    include ../common/Makefile.elf
+endif
+
 CC=gcc
 CFLAGS=$(SCFLAGS) -O2 -g -I. -I../common
 PREFIX=/usr
@@ -20,4 +26,5 @@ clean:
 	rm -f $(SONAME) $(COBJS) $(OBJS)
 
 install:
-	install -D $(SONAME) $(PREFIX)/lib/gelfload/$(SONAME)
+	install -d $(PREFIX)/lib/gelfload
+	install $(SONAME) $(PREFIX)/lib/gelfload/$(SONAME)

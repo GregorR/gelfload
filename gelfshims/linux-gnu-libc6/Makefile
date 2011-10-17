@@ -1,4 +1,4 @@
 TARGET=linux-gnu-libc6
-OBJS=gmon.o
+OBJS=generic.o gmon.o progname.o stdio.o
 
-include ../common/Makefile.elf
+include ../common/Makefile.common
