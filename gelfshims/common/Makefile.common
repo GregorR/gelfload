@@ -12,7 +12,7 @@ COBJS=cdirect.o cshstdio.o
 all: $(SONAME)
 
 $(SONAME): $(COBJS) $(OBJS)
-	$(CC) $(CFLAGS) $(SCFLAGS) $(SLDFLAGS) $(SONAMEFLAGS) $(COBJS) $(OBJS) -o $(SONAME)
+	$(CC) $(CFLAGS) $(SCFLAGS) $(SLDFLAGS) $(SONAMEFLAGS) $(COBJS) $(OBJS) $(SLIBS) -o $(SONAME)
 
 .SUFFIXES: .c .o
 

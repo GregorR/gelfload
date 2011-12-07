@@ -9,7 +9,7 @@
 
 TSHIM_NEW_D(FILE) {
     TSHIM(FILE) *ret;
-    SF(ret, malloc, NULL, (sizeof(TSHIM(FILE))));
+    SF(ret, calloc, NULL, (sizeof(TSHIM(FILE)) + 256, 1)); /* padded for weird OSes */
     ret->hf = NULL;
 }
 

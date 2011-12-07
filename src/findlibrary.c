@@ -77,46 +77,45 @@ char *findLibrary(const char *metanm)
         exit(1);
     }
 
-    /* split it by dots */
-    while (1) {
-        /* first try LD_LIBRARY_PATH */
-        for (i = 0; ldLibraryPath[i]; i++) {
-            if (foundlib = globLibrary(filenm, ldLibraryPath[i], postlib)) break;
+    /* 'core' libs are hardwired */
+    if (!strncmp(metanm, "ld", 2) ||
+        !strncmp(metanm, "libc.so.", 8) ||
+        !strncmp(metanm, "libintl.so.", 11) ||
+        !strncmp(metanm, "libiconv.so.", 12) ||
+        !strncmp(metanm, "libsocket.so.", 13) ||
+        !strncmp(metanm, "libgen.so.", 10)) {
+        foundlib = findLibrary("libgelfload-host-core.so");
+    } else {
+
+        /* split it by dots */
+        while (1) {
+            /* first try LD_LIBRARY_PATH */
+            for (i = 0; ldLibraryPath[i]; i++) {
+                if (foundlib = globLibrary(filenm, ldLibraryPath[i], postlib)) break;
+            }
+            if (ldLibraryPath[i]) break;
+    
+            /* then try /lib and /usr/lib */
+            if (foundlib = globLibrary(filenm, "/lib", postlib)) break;
+            if (foundlib = globLibrary(filenm, "/usr/lib", postlib)) break;
+    
+            /* then with 32 or 64 */
+            if (sizeof(size_t) == 8) {
+                if (foundlib = globLibrary(filenm, "/lib64", postlib)) break;
+                if (foundlib = globLibrary(filenm, "/usr/lib64", postlib)) break;
+            } else if (sizeof(size_t) == 4) {
+                if (foundlib = globLibrary(filenm, "/lib32", postlib)) break;
+                if (foundlib = globLibrary(filenm, "/usr/lib32", postlib)) break;
+            }
+    
+            /* of course that list isn't very portable */
+    
+            /* now remove a bit */
+            foundlib = strrchr(postlib, '.');
+            if (foundlib == NULL) break;
+            *foundlib = '\0';
         }
-        if (ldLibraryPath[i]) break;
 
-        /* first try /lib and /usr/lib */
-        if (foundlib = globLibrary(filenm, "/lib", postlib)) break;
-        if (foundlib = globLibrary(filenm, "/usr/lib", postlib)) break;
-
-        /* then with 32 or 64 */
-        if (sizeof(size_t) == 8) {
-            if (foundlib = globLibrary(filenm, "/lib64", postlib)) break;
-            if (foundlib = globLibrary(filenm, "/usr/lib64", postlib)) break;
-        } else if (sizeof(size_t) == 4) {
-            if (foundlib = globLibrary(filenm, "/lib32", postlib)) break;
-            if (foundlib = globLibrary(filenm, "/usr/lib32", postlib)) break;
-        }
-
-        /* of course that list isn't very portable */
-
-        /* now remove a bit */
-        foundlib = strrchr(postlib, '.');
-        if (foundlib == NULL) break;
-        *foundlib = '\0';
-    }
-
-    /* some hardwired alternates */
-    if (foundlib == NULL) {
-        if (!strncmp(metanm, "ld", 2) ||
-            !strncmp(metanm, "libintl.so.", 11) ||
-            !strncmp(metanm, "libiconv.so.", 12) ||
-            !strncmp(metanm, "libsocket.so.", 13) ||
-            !strncmp(metanm, "libgen.so.", 10) ||
-            !strncmp(metanm, "ld-linux.so.", 12)) {
-            /* snag it from libc */
-            foundlib = findLibrary("libc.so");
-        }
     }
 
     free(metanmd);

@@ -1,4 +1,5 @@
 SCFLAGS=-fPIC
 SLDFLAGS=-shared
+SLIBS=
 SONAME=libgelfload-gelfshims-$(TARGET).so.0
 SONAMEFLAGS=-Wl,-soname,$(SONAME)

@@ -34,3 +34,11 @@ int SHIM(__overflow)(TSHIM(FILE) *a, int b)
     TSHIM_T2H(FILE)(&ha, &a);
     return fputc(b, ha);
 }
+
+/* __uflow is a funny name for getc_unlocked */
+int SHIM(__uflow)(TSHIM(FILE) *a)
+{
+    FILE *ha = NULL;
+    TSHIM_T2H(FILE)(&ha, &a);
+    return getc(ha);
+}
