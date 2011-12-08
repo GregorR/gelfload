@@ -16,9 +16,13 @@ int SHIM(textdomain)() { return 0; }
 char *SHIM(__strdup)(const char *a) { return strdup(a); }
 void *SHIM(__ctype_toupper_loc)() { return (void *) toupper; }
 void *SHIM(__ctype_tolower_loc)() { return (void *) tolower; }
+unsigned long long SHIM(__strtoull_internal)(const char *a, char **b, int c) { return strtoull(a, b, c); }
 
 UNIMPL_SHIM(__ctype_b_loc);
 UNIMPL_SHIM(clock_settime);
+UNIMPL_SHIM(_obstack_begin);
+UNIMPL_SHIM(_obstack_newchunk);
+UNIMPL_SHIM(_Jv_RegisterClasses);
 
 /*
 UNIMPL_SHIM(dirfd);

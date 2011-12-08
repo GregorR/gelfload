@@ -159,3 +159,10 @@ ssize_t SHIM(getdelim)(char **a, size_t *b, int c, TSHIM(FILE) *d)
     TSHIM_T2H(FILE)(&hd, &d);
     return getdelim(a, b, c, hd);
 }
+
+int SHIM(fflush_unlocked)(TSHIM(FILE) *a)
+{
+    FILE *ha;
+    TSHIM_T2H(FILE)(&ha, &a);
+    return fflush(ha);
+}
