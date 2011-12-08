@@ -8,7 +8,6 @@
 
 int SHIM(bindtextdomain)() { return 0; }
 int SHIM(textdomain)() { return 0; }
-int SHIM(open64)(const char *path, int oflag, int mode) { return open(path, oflag, mode); }
 void SHIM(__assert_fail)() { abort(); }
 char *SHIM(__strdup)(const char *a) { return strdup(a); }
 int SHIM(__ctype_get_mb_cur_max)() { return MB_CUR_MAX; }
