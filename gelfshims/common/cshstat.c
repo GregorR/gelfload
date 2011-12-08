@@ -1,4 +1,10 @@
+#define _BSD_SOURCE /* for fchdir */
+
+#include <fcntl.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 #include "shstat.h"
 
 #define SHIM2(x) SHIM(x)
@@ -62,8 +68,28 @@ int SHIM2(STAT(fstatat))(int a, const char *b, TSHIM2(STAT(structstat)) *c, int 
 {
     STAT(structstat) hc;
     STAT(structstat) *hcp = &hc;
-    int ret = fstatat(a, b, hcp, d);
-    TSHIM_H2T2(STAT(structstat))(&c, &hcp);
+    int ret, curdir;
+
+    /* not all platforms provide fstatat, so chdir */
+    curdir = open(".", O_RDONLY);
+    if (curdir < 0) {
+        /* failed to get the current directory */
+        ret = -1;
+    } else {
+        if (fchdir(a) >= 0) {
+            if (d) {
+                /* FIXME: assume AT_SYMLINK_NOFOLLOW */
+                ret = lstat(b, hcp);
+            } else {
+                ret = stat(b, hcp);
+            }
+            TSHIM_H2T2(STAT(structstat))(&c, &hcp);
+            fchdir(curdir);
+        } else {
+            ret = -1;
+        }
+        close(curdir);
+    }
     return ret;
 }
 
