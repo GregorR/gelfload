@@ -14,6 +14,15 @@ AC_PROG_CC
 
 # Checks for libraries.
 AC_CHECK_LIB([iconv], [iconv])
+AC_CHECK_LIB([rt], [clock_gettime])
+
+for ldlib in /lib/ld*.so*; do
+    LD_LIBS="$LIBS"
+    LIBS="$LIBS $ldlib"; export LIBS
+    AC_CHECK_LIB([c], [open], [true], [
+        LIBS="$LD_LIBS"; export LIBS
+    ])
+done
 
 # Checks for header files.
 

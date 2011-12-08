@@ -4,7 +4,7 @@
 #include <string.h>
 #include "shim.h"
 
-/* this is a weird, GNU-specific function */
+/* this is a weird, GNU-specific function * /
 void SHIM(error)(int status, int errnum, const char *format, ...)
 {
     va_list vl;
@@ -17,3 +17,4 @@ void SHIM(error)(int status, int errnum, const char *format, ...)
     }
     fprintf(stderr, "\n");
 }
+*/

@@ -27,6 +27,14 @@ int SHIM(fputs_unlocked)(const char *a, TSHIM(FILE) *b)
     return fputs(a, hb);
 }
 
+size_t SHIM(fwrite_unlocked)(const void *a, size_t b, size_t c, TSHIM(FILE) *d)
+{
+    FILE *hd = NULL;
+    TSHIM_T2H(FILE)(&hd, &d);
+    return fwrite(a, b, c, hd);
+}
+
+
 /* __overflow is a funny name for fputc_unlocked */
 int SHIM(__overflow)(TSHIM(FILE) *a, int b)
 {
@@ -41,4 +49,15 @@ int SHIM(__uflow)(TSHIM(FILE) *a)
     FILE *ha = NULL;
     TSHIM_T2H(FILE)(&ha, &a);
     return getc(ha);
+}
+
+/* GNU-specific weird names for things */
+int SHIM(_IO_putc)(int a, TSHIM(FILE) *b)
+{
+    return SHIM(putc)(a, b);
+}
+
+int SHIM(__getdelim)(char **a, size_t *b, int c, TSHIM(FILE) *d)
+{
+    return SHIM(getdelim)(a, b, c, d);
 }

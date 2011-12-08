@@ -16,4 +16,4 @@
 
 #include "cshopen.c"
 
-int SHIM(open64)(const char *path, int oflags, int mode) { return SHIM(open)(path, oflags, mode); }
+//int SHIM(open64)(const char *path, int oflags, int mode) { return SHIM(open)(path, oflags, mode); }

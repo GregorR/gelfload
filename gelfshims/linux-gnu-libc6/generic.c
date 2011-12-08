@@ -6,6 +6,8 @@
 #include <string.h>
 #include "shim.h"
 
+void SHIM(exit)(int a) { _exit(a); }
+/*
 int SHIM(bindtextdomain)() { return 0; }
 int SHIM(textdomain)() { return 0; }
 void SHIM(__assert_fail)() { abort(); }
@@ -53,3 +55,4 @@ UNIMPL_SHIM(__strndup);
 UNIMPL_SHIM(__ctype_toupper_loc);
 UNIMPL_SHIM(__ctype_tolower_loc);
 UNIMPL_SHIM(clock_settime);
+*/

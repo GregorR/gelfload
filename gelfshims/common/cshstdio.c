@@ -110,3 +110,52 @@ size_t SHIM(fread)(void *a, size_t b, size_t c, TSHIM(FILE) *d)
     TSHIM_T2H(FILE)(&hd, &d);
     return fread(a, b, c, hd);
 }
+
+int SHIM(setvbuf)(TSHIM(FILE) *a, char *b, int c, size_t d)
+{
+    FILE *ha;
+    TSHIM_T2H(FILE)(&ha, &a);
+    return setvbuf(ha, b, c, d);
+}
+
+int SHIM(ferror)(TSHIM(FILE) *a)
+{
+    FILE *ha;
+    TSHIM_T2H(FILE)(&ha, &a);
+    return ferror(ha);
+}
+
+void SHIM(clearerr)(TSHIM(FILE) *a)
+{
+    FILE *ha;
+    TSHIM_T2H(FILE)(&ha, &a);
+    return clearerr(ha);
+}
+
+int SHIM(putc)(int a, TSHIM(FILE) *b)
+{
+    FILE *hb;
+    TSHIM_T2H(FILE)(&hb, &b);
+    return putc(a, hb);
+}
+
+size_t SHIM(fwrite)(const void *a, size_t b, size_t c, TSHIM(FILE) *d)
+{
+    FILE *hd;
+    TSHIM_T2H(FILE)(&hd, &d);
+    return fwrite(a, b, c, hd);
+}
+
+int SHIM(fputc)(int a, TSHIM(FILE) *b)
+{
+    FILE *hb;
+    TSHIM_T2H(FILE)(&hb, &b);
+    return fputc(a, hb);
+}
+
+ssize_t SHIM(getdelim)(char **a, size_t *b, int c, TSHIM(FILE) *d)
+{
+    FILE *hd;
+    TSHIM_T2H(FILE)(&hd, &d);
+    return getdelim(a, b, c, hd);
+}
