@@ -5,7 +5,6 @@
 #include <unistd.h>
 #include "shim.h"
 
-#if 0
 #define STAT(x) x ## 64__internal
 #define TSTAT_H
 
@@ -80,4 +79,3 @@ int SHIM(__fxstat64)(int ver, int fd, TSHIM(structstat64__internal) *buf)
     VERCHECK;
     return SHIM2(STAT(fstat))(fd, buf);
 }
-#endif

@@ -1,20 +1,26 @@
 #define _SVID_SOURCE /* for strdup */
 
+#include <ctype.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include "shim.h"
 
 void SHIM(exit)(int a) { _exit(a); }
-/*
+int SHIM(__ctype_get_mb_cur_max)() { return MB_CUR_MAX; }
+void SHIM(__assert_fail)() { abort(); }
 int SHIM(bindtextdomain)() { return 0; }
 int SHIM(textdomain)() { return 0; }
-void SHIM(__assert_fail)() { abort(); }
 char *SHIM(__strdup)(const char *a) { return strdup(a); }
-int SHIM(__ctype_get_mb_cur_max)() { return MB_CUR_MAX; }
+void *SHIM(__ctype_toupper_loc)() { return (void *) toupper; }
+void *SHIM(__ctype_tolower_loc)() { return (void *) tolower; }
 
 UNIMPL_SHIM(__ctype_b_loc);
+UNIMPL_SHIM(clock_settime);
+
+/*
 UNIMPL_SHIM(dirfd);
 UNIMPL_SHIM(fchownat);
 UNIMPL_SHIM(__lxstat64);
@@ -22,7 +28,6 @@ UNIMPL_SHIM(openat64);
 UNIMPL_SHIM(readdir64);
 UNIMPL_SHIM(__fxstatat64);
 UNIMPL_SHIM(fdopendir);
-UNIMPL_SHIM(__getdelim);
 UNIMPL_SHIM(mempcpy);
 UNIMPL_SHIM(fseeko64);
 UNIMPL_SHIM(__freading);
@@ -52,7 +57,4 @@ UNIMPL_SHIM(mmap64);
 UNIMPL_SHIM(__rawmemchr);
 UNIMPL_SHIM(getrlimit64);
 UNIMPL_SHIM(__strndup);
-UNIMPL_SHIM(__ctype_toupper_loc);
-UNIMPL_SHIM(__ctype_tolower_loc);
-UNIMPL_SHIM(clock_settime);
 */

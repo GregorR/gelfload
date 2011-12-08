@@ -61,3 +61,11 @@ int SHIM(__getdelim)(char **a, size_t *b, int c, TSHIM(FILE) *d)
 {
     return SHIM(getdelim)(a, b, c, d);
 }
+
+/* -64 */
+int SHIM(fseeko64)(TSHIM(FILE) *a, long long b, int c)
+{
+    FILE *ha;
+    TSHIM_T2H(FILE)(&ha, &a);
+    return fseeko(ha, b, c);
+}
