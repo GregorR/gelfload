@@ -15,9 +15,9 @@
 
 /* expected versions */
 #if __WORDSIZE == 32
-#define _STAT_VER 3
+#define T_STAT_VER 3
 #else
-#define _STAT_VER 1
+#define T_STAT_VER 1
 #endif
 
 /* stat64 version 1 on GNU/Linux */
@@ -62,7 +62,7 @@ TSHIM(structstat64__internal) {
 #include "cshstat.c"
 
 #define VERCHECK do { \
-    if (ver != 0 && ver != _STAT_VER) { \
+    if (ver != 0 && ver != T_STAT_VER) { \
         fprintf(stderr, "Unrecognized stat version %d\n", ver); \
         return -1; \
     } \

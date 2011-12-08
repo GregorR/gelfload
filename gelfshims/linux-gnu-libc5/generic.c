@@ -1,8 +1,8 @@
-#include <setjmp.h>
 #include <stdio.h>
 #include "shim.h"
 
-void SHIM(__ctype_b)() {}
+/* FIXME: I don't really know what this is */
+unsigned char SHIM(__ctype_b)[32];
+
 void SHIM(__libc_init)() {}
 void SHIM(__setfpucw)() {}
-void SHIM(__setjmp)(jmp_buf env) { return setjmp(env); }

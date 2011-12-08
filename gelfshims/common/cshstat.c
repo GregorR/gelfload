@@ -1,4 +1,6 @@
+#ifndef _BSD_SOURCE
 #define _BSD_SOURCE /* for fchdir */
+#endif
 
 #include <fcntl.h>
 #include <string.h>
