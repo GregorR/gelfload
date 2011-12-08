@@ -22,7 +22,7 @@
 
 /* stat64 version 1 on GNU/Linux */
 TSHIM(structstat64__internal) {
-    unsigned long st_dev;
+    unsigned long long st_dev;
 #if __WORDSIZE == 64
     unsigned long st_ino;
     unsigned long st_nlink;
@@ -40,22 +40,22 @@ TSHIM(structstat64__internal) {
     unsigned int st_rdev;
     long st_size;
 #else
-    unsigned int st_rdev;
+    unsigned long long st_rdev;
     unsigned int __pad2;
     long long st_size;
 #endif
     long st_blksize;
     long long st_blocks;
     long __st_atime;
-    unsigned long int st_atimensec;
+    unsigned long st_atimensec;
     long __st_mtime;
-    unsigned long int st_mtimensec;
+    unsigned long st_mtimensec;
     long __st_ctime;
-    unsigned long int st_ctimensec;
+    unsigned long st_ctimensec;
 #if __WORDSIZE == 64
     long int __unused[3];
 #else
-    unsigned long st_ino;
+    unsigned long long st_ino;
 #endif
 };
 
