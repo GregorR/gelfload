@@ -14,7 +14,6 @@ char *SHIM(__strdup)(const char *a) { return strdup(a); }
 int SHIM(__ctype_get_mb_cur_max)() { return MB_CUR_MAX; }
 
 UNIMPL_SHIM(__ctype_b_loc);
-UNIMPL_SHIM(error);
 UNIMPL_SHIM(dirfd);
 UNIMPL_SHIM(fchownat);
 UNIMPL_SHIM(__lxstat64);
