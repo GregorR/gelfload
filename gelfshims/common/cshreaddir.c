@@ -43,3 +43,6 @@ TSHIM2(DIRENT(structdirent)) *SHIM2(DIRENT(readdir))(TSHIM(DIR) *a)
 
     return tr;
 }
+
+/* separate file because it's lifted from Newlib */
+#include "cscandir.c"
