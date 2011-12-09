@@ -22,6 +22,17 @@ UNIMPL_SHIM(clock_settime);
 UNIMPL_SHIM(_obstack_begin);
 UNIMPL_SHIM(_obstack_newchunk);
 UNIMPL_SHIM(_Jv_RegisterClasses);
+UNIMPL_SHIM(__fsetlocking);
+UNIMPL_SHIM(umount2);
+UNIMPL_SHIM(umount);
+UNIMPL_SHIM(fgets_unlocked);
+UNIMPL_SHIM(strverscmp);
+UNIMPL_SHIM(__strtok_r);
+UNIMPL_SHIM(___tls_get_addr);
+UNIMPL_SHIM(mkstemp64);
+UNIMPL_SHIM(mmap64);
+UNIMPL_SHIM(getrlimit64);
+UNIMPL_SHIM(__strndup);
 
 /*
 UNIMPL_SHIM(dirfd);
