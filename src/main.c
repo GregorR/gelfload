@@ -5,6 +5,8 @@
 
 #ifdef __WIN32
 #include <malloc.h>
+#else
+#include <alloca.h>
 #endif
 
 #include "elfload.h"
@@ -17,7 +19,7 @@ int main(int argc, char **argv, char **envp)
     struct ELF_File *f;
     void **newstack;
     int i, envc, base;
-    char *dir, *fil, *arg, *argn, *gelfshims, *shimtarget;
+    char *dir, *fil, *arg, *gelfshims, *shimtarget;
     char *elff = NULL;
     int elfargs;
 
@@ -27,7 +29,6 @@ int main(int argc, char **argv, char **envp)
     shimtarget = "linux-gnu-libc6";
     for (i = 1; i < argc; i++) {
         arg = argv[i];
-        argn = argv[i+1];
         if (arg[0] == '-') {
             ARGN(t, target) {
                 shimtarget = arg;
@@ -96,4 +97,5 @@ int main(int argc, char **argv, char **envp)
 
     /* and call it */
     WITHSTACK_JMP(newstack, f->ehdr->e_entry + f->offset);
+    return 1;
 }

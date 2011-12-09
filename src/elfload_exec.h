@@ -21,14 +21,14 @@
 
 #if defined(__i386__)
 #define WITHSTACK_JMP(newstack, newloc) \
-    asm("mov %0, %%esp\n" \
+    __asm__("mov %0, %%esp\n" \
         "jmp *%1\n" \
         : \
         : "r"(newstack), "r"(newloc));
 
 #elif defined(__x86_64__)
 #define WITHSTACK_JMP(newstack, newloc) \
-    asm("mov %0, %%rsp\n" \
+    __asm__("mov %0, %%rsp\n" \
         "jmp *%1\n" \
         : \
         : "r"(newstack), "r"(newloc));

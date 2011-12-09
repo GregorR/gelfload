@@ -1,0 +1,1 @@
+struct core {int core;};

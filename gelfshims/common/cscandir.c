@@ -47,7 +47,18 @@ static char sccsid[] = "@(#)scandir.c	5.10 (Berkeley) 2/23/91";
 #include <dirent.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include <limits.h>
+#include <unistd.h>
 #include "shim.h"
+
+#ifndef NAME_MAX
+#ifdef MAXNAMLEN
+#define NAME_MAX MAXNAMLEN
+#else
+#define NAME_MAX pathconf(".", _PC_NAME_MAX)
+#endif
+#endif
 
 /*
  * The DIRSIZ macro gives the minimum record length which will hold
@@ -58,10 +69,10 @@ static char sccsid[] = "@(#)scandir.c	5.10 (Berkeley) 2/23/91";
 #undef DIRSIZ
 #ifdef _DIRENT_HAVE_D_NAMLEN
 #define DIRSIZ(dp) \
-    ((sizeof (TSHIM2(DIRENT(structdirent))) - (MAXNAMLEN+1)) + (((dp)->d_namlen+1 + 3) &~ 3))
+    ((sizeof (TSHIM2(DIRENT(structdirent))) - (NAME_MAX+1)) + (((dp)->d_namlen+1 + 3) &~ 3))
 #else
 #define DIRSIZ(dp) \
-    ((sizeof (TSHIM2(DIRENT(structdirent))) - (MAXNAMLEN+1)) + ((strlen((dp)->d_name)+1 + 3) &~ 3))
+    ((sizeof (TSHIM2(DIRENT(structdirent))) - (NAME_MAX+1)) + ((strlen((dp)->d_name)+1 + 3) &~ 3))
 #endif
 
 #ifndef __P
@@ -71,6 +82,7 @@ static char sccsid[] = "@(#)scandir.c	5.10 (Berkeley) 2/23/91";
 TSHIM(DIR) *SHIM(opendir)(const char *a);
 int SHIM(dirfd)(TSHIM(DIR) *a);
 TSHIM2(DIRENT(structdirent)) *SHIM2(DIRENT(readdir))(TSHIM(DIR) *a);
+int SHIM(closedir)(TSHIM(DIR) *a);
 
 int
 SHIM2(DIRENT(scandir))(
@@ -148,7 +160,7 @@ cleanup:
 	SHIM(closedir)(dirp);
 	if (successful) {
 		if (nitems && dcomp != NULL)
-			qsort(names, nitems, sizeof(TSHIM2(DIRENT(structdirent)) *), (void *)dcomp);
+			qsort(names, nitems, sizeof(TSHIM2(DIRENT(structdirent)) *), (int(*)(const void *, const void *))dcomp);
 		*namelist = names;
 		rc = nitems;
 	} else {  /* We were unsuccessful, clean up storage and return -1.  */

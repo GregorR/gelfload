@@ -1,9 +1,21 @@
+#define _POSIX_C_SOURCE 200809L /* for getdelim */
+#define _GNU_SOURCE /* also for getdelim (glibc < 2.10) */
+
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef __GLIBC__
+#include <stdio_ext.h>
+#endif
 #include "shim.h"
 #include "shstdio.h"
+
+#ifdef __WIN32
+#include <malloc.h>
+#else
+#include <alloca.h>
+#endif
 
 #include "redirect.h"
 
@@ -130,7 +142,7 @@ void SHIM(clearerr)(TSHIM(FILE) *a)
 {
     FILE *ha;
     TSHIM_T2H(FILE)(&ha, &a);
-    return clearerr(ha);
+    clearerr(ha);
 }
 
 int SHIM(putc)(int a, TSHIM(FILE) *b)

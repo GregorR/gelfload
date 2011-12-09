@@ -20,6 +20,8 @@
  * SOFTWARE.
  */
 
+#define _SVID_SOURCE /* for strdup */
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>

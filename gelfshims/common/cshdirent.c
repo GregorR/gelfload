@@ -6,6 +6,7 @@
 #include <string.h>
 #include "shim.h"
 #include "shdirent.h"
+#include "shstdio.h"
 
 TSHIM_NEW_D(DIR) {
     TSHIM(DIR) *ret;
@@ -43,7 +44,7 @@ TSHIM(DIR) *SHIM(opendir)(const char *a)
     hr = opendir(a);
     if (hr) {
         tr = TSHIM_NEW(DIR)();
-        TSHIM_H2T(FILE)(&tr, &hr);
+        TSHIM_H2T(DIR)(&tr, &hr);
     }
     return tr;
 }

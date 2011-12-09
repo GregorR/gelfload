@@ -1,4 +1,5 @@
 #define _POSIX_SOURCE /* for strtok_r */
+#define _SVID_SOURCE /* for strdup */
 
 #include <glob.h>
 #include <stdio.h>
@@ -40,7 +41,7 @@ char *findLibrary(const char *metanm)
             }
             ldLibraryPath[0] = strtok_r(ldLibraryPathEnv, ":", &saveptr);
             if (strlen(ldLibraryPath[0]) > maxLen) maxLen = strlen(ldLibraryPath[0]);
-            for (i = 1; ldLibraryPath[i] = strtok_r(NULL, ":", &saveptr); i++)
+            for (i = 1; (ldLibraryPath[i] = strtok_r(NULL, ":", &saveptr)); i++)
                 if (strlen(ldLibraryPath[i]) > maxLen) maxLen = strlen(ldLibraryPath[i]);
 
         } else {
@@ -93,21 +94,21 @@ char *findLibrary(const char *metanm)
         while (1) {
             /* first try LD_LIBRARY_PATH */
             for (i = 0; ldLibraryPath[i]; i++) {
-                if (foundlib = globLibrary(filenm, ldLibraryPath[i], postlib)) break;
+                if ((foundlib = globLibrary(filenm, ldLibraryPath[i], postlib))) break;
             }
             if (ldLibraryPath[i]) break;
     
             /* then try /lib and /usr/lib */
-            if (foundlib = globLibrary(filenm, "/lib", postlib)) break;
-            if (foundlib = globLibrary(filenm, "/usr/lib", postlib)) break;
+            if ((foundlib = globLibrary(filenm, "/lib", postlib))) break;
+            if ((foundlib = globLibrary(filenm, "/usr/lib", postlib))) break;
     
             /* then with 32 or 64 */
             if (sizeof(size_t) == 8) {
-                if (foundlib = globLibrary(filenm, "/lib64", postlib)) break;
-                if (foundlib = globLibrary(filenm, "/usr/lib64", postlib)) break;
+                if ((foundlib = globLibrary(filenm, "/lib64", postlib))) break;
+                if ((foundlib = globLibrary(filenm, "/usr/lib64", postlib))) break;
             } else if (sizeof(size_t) == 4) {
-                if (foundlib = globLibrary(filenm, "/lib32", postlib)) break;
-                if (foundlib = globLibrary(filenm, "/usr/lib32", postlib)) break;
+                if ((foundlib = globLibrary(filenm, "/lib32", postlib))) break;
+                if ((foundlib = globLibrary(filenm, "/usr/lib32", postlib))) break;
             }
     
             /* of course that list isn't very portable */

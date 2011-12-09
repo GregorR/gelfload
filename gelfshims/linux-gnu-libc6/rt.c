@@ -1,3 +1,5 @@
+#define _POSIX_C_SOURCE 199309L /* for struct timespec */
+
 #include <sys/timeb.h>
 #include <time.h>
 #include "shim.h"

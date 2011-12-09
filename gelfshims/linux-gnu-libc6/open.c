@@ -1,3 +1,5 @@
+#define _XOPEN_SOURCE 500 /* for O_DSYNC */
+
 #define TO_RDONLY           00
 #define TO_WRONLY           01
 #define TO_RDWR             02

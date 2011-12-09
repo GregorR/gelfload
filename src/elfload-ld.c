@@ -1,6 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+
+#ifdef __WIN32
+#include <malloc.h>
+#else
+#include <alloca.h>
+#endif
 
 #include "../config.h"
 

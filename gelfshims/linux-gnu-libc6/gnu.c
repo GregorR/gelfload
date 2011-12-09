@@ -1,3 +1,6 @@
+#define _POSIX_C_SOURCE 200809L /* for fchdir */
+#define _XOPEN_SOURCE 600 /* also for fchdir (glibc < 2.12), for posix_openpt */
+
 /* arbitrary GNU-specific functions */
 #include <alloca.h>
 #include <fcntl.h>

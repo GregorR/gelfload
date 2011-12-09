@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 
 #include "elfload.h"
 #include "elfload_dlfcn.h"
@@ -37,16 +38,16 @@ int elfload_dlclose(void *handle) {return 0;}
 void *elfload_dl(const char *fname)
 {
     if (strcmp(fname, "dlopen") == 0) {
-        return (void *) elfload_dlopen;
+        return (void *) (size_t) elfload_dlopen;
 
     } else if (strcmp(fname, "dlerror") == 0) {
-        return (void *) elfload_dlerror;
+        return (void *) (size_t) elfload_dlerror;
 
     } else if (strcmp(fname, "dlsym") == 0) {
-        return (void *) elfload_dlsym;
+        return (void *) (size_t) elfload_dlsym;
 
     } else if (strcmp(fname, "dlclose") == 0) {
-        return (void *) elfload_dlclose;
+        return (void *) (size_t) elfload_dlclose;
 
     }
 

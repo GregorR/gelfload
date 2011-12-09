@@ -172,10 +172,10 @@ struct ELF_File *loadELF(const char *nm, const char *instdir)
     /* now go through program headers, to find the allocation space of this file */
     f->min = (void *) -1;
     f->max = 0;
-    curphdrl = f->prog + f->ehdr->e_phoff - f->ehdr->e_phentsize;
+    curphdrl = (void *) ((char *) f->prog + f->ehdr->e_phoff - f->ehdr->e_phentsize);
 
     for (phdri = 0; phdri < f->ehdr->e_phnum; phdri++) {
-        curphdrl += f->ehdr->e_phentsize;
+        curphdrl = (void *) ((char *) curphdrl + f->ehdr->e_phentsize);
         curphdr = (ElfNative_Phdr *) curphdrl;
 
         /* perhaps check its location */
@@ -184,14 +184,14 @@ struct ELF_File *loadELF(const char *nm, const char *instdir)
             if ((void *) curphdr->p_vaddr < f->min) {
                 f->min = (void *) curphdr->p_vaddr;
             }
-            if ((void *) curphdr->p_vaddr + curphdr->p_memsz > f->max) {
-                f->max = (void *) curphdr->p_vaddr + curphdr->p_memsz;
+            if ((void *) ((char *) curphdr->p_vaddr + curphdr->p_memsz) > f->max) {
+                f->max = (void *) ((char *) curphdr->p_vaddr + curphdr->p_memsz);
             }
         }
     }
 
     /* with this size info, we can allocate the space */
-    f->memsz = f->max - f->min;
+    f->memsz = ((char *) f->max - (char *) f->min);
     
     /* if this is a binary, try to allocate it in place. elfload is addressed above 0x18000000 */
     if (f->ehdr->e_type == ET_EXEC && f->max < (void *) 0x18000000) {
@@ -203,26 +203,26 @@ struct ELF_File *loadELF(const char *nm, const char *instdir)
     }
     memset(f->loc, 0, f->memsz);
 
-    f->offset = f->loc - f->min;
+    f->offset = (char *) f->loc - (char *) f->min;
 
     /* we have the space, so load it in */
-    curphdrl = f->prog + f->ehdr->e_phoff - f->ehdr->e_phentsize;
+    curphdrl = (void *) ((char *) f->prog + f->ehdr->e_phoff - f->ehdr->e_phentsize);
     for (phdri = 0; phdri < f->ehdr->e_phnum; phdri++) {
-        curphdrl += f->ehdr->e_phentsize;
+        curphdrl = ((char *) curphdrl + f->ehdr->e_phentsize);
         curphdr = (ElfNative_Phdr *) curphdrl;
 
         /* perhaps load it in */
         if (curphdr->p_type == PT_LOAD) {
             if (curphdr->p_filesz > 0) {
                 /* OK, there's something to copy in, so do so */
-                memcpy((void *) curphdr->p_vaddr + f->offset,
-                       f->prog + curphdr->p_offset,
+                memcpy((void *) ((char *) curphdr->p_vaddr + f->offset),
+                       (char *) f->prog + curphdr->p_offset,
                        curphdr->p_filesz);
             }
 
         } else if (curphdr->p_type == PT_DYNAMIC) {
             /* we need this to load in dependencies, et cetera */
-            f->dynamic = (ElfNative_Dyn *) (f->prog + curphdr->p_offset);
+            f->dynamic = (ElfNative_Dyn *) ((char *) f->prog + curphdr->p_offset);
 
         }
     }
@@ -293,7 +293,7 @@ void relocateELF(int fileNo, struct ELF_File *f)
     /* we ought to have rel and symtab defined */
     if (f->rel && f->symtab) {
         ElfNative_Rel *currel = f->rel;
-        for (; (void *) currel < (void *) f->rel + f->relsz; currel++) {
+        for (; (char *) currel < (char *) f->rel + f->relsz; currel++) {
             switch (ELFNATIVE_R_TYPE(currel->r_info)) {
                 case R_386_32:
                     WORD32_REL(REL_S + REL_A);
@@ -305,10 +305,12 @@ void relocateELF(int fileNo, struct ELF_File *f)
 
                 case R_386_COPY:
                 {
+                    void *soptr;
+
                     /* this is a bit more convoluted, as we need to find it in both places and copy */
                     ElfNative_Sym *localsym, *sosym;
                     localsym = &(f->symtab[ELFNATIVE_R_SYM(currel->r_info)]);
-                    void *soptr = findELFSymbol(
+                    soptr = findELFSymbol(
                             f->strtab + localsym->st_name,
                             NULL, -1, fileNo, &sosym);
 
@@ -330,7 +332,7 @@ void relocateELF(int fileNo, struct ELF_File *f)
                     break;
 
                 case R_386_RELATIVE:
-                    WORD32_REL(f->loc + REL_A);
+                    WORD32_REL((char *) f->loc + REL_A);
                     break;
 
                 default:
@@ -341,7 +343,7 @@ void relocateELF(int fileNo, struct ELF_File *f)
 
     if (f->jmprel && f->symtab) {
         ElfNative_Rel *currel = (ElfNative_Rel *) f->jmprel;
-        for (; (void *) currel < f->jmprel + f->jmprelsz; currel++) {
+        for (; (char *) currel < (char *) f->jmprel + f->jmprelsz; currel++) {
             switch (ELFNATIVE_R_TYPE(currel->r_info)) {
                 case R_386_JMP_SLOT:
                     WORD32_REL(REL_S);
@@ -568,7 +570,7 @@ ElfNative_Word elf_hash(const unsigned char *name)
 
     while (*name) {
         h = (h << 4) + *name++;
-        if (g = h & 0xf0000000)
+        if ((g = h & 0xf0000000))
             h ^= g >> 24;
         h &= ~g;
     }

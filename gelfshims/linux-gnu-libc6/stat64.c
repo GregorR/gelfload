@@ -1,3 +1,7 @@
+#define _POSIX_C_SOURCE 200809L /* for fchdir */
+#define _XOPEN_SOURCE 500 /* also for fchdir (glibc < 2.12) */
+
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
@@ -22,7 +26,7 @@
 
 /* stat64 version 1 on GNU/Linux */
 TSHIM(structstat64__internal) {
-    unsigned long long st_dev;
+    uint64_t st_dev;
 #if __WORDSIZE == 64
     unsigned long st_ino;
     unsigned long st_nlink;
@@ -40,12 +44,12 @@ TSHIM(structstat64__internal) {
     unsigned int st_rdev;
     long st_size;
 #else
-    unsigned long long st_rdev;
+    uint64_t st_rdev;
     unsigned int __pad2;
-    long long st_size;
+    int64_t st_size;
 #endif
     long st_blksize;
-    long long st_blocks;
+    int64_t st_blocks;
     long __st_atime;
     unsigned long st_atimensec;
     long __st_mtime;
@@ -55,7 +59,7 @@ TSHIM(structstat64__internal) {
 #if __WORDSIZE == 64
     long int __unused[3];
 #else
-    unsigned long long st_ino;
+    uint64_t st_ino;
 #endif
 };
 

@@ -1,8 +1,15 @@
+#define _POSIX_C_SOURCE 200809L /* for getdelim */
+#define _GNU_SOURCE /* also for getdelim (glibc < 2.10) */
+
 #include <alloca.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 #include "shim.h"
 #include "shstdio.h"
+
+int SHIM(putc)(int a, TSHIM(FILE) *b);
+ssize_t SHIM(getdelim)(char **a, size_t *b, int c, TSHIM(FILE) *d);
 
 /* stdin/stdout/stderr are just globals */
 TSHIM(FILE) *SHIM(stdin), *SHIM(stdout), *SHIM(stderr);
@@ -63,7 +70,7 @@ int SHIM(__getdelim)(char **a, size_t *b, int c, TSHIM(FILE) *d)
 }
 
 /* -64 */
-int SHIM(fseeko64)(TSHIM(FILE) *a, long long b, int c)
+int SHIM(fseeko64)(TSHIM(FILE) *a, int64_t b, int c)
 {
     FILE *ha;
     TSHIM_T2H(FILE)(&ha, &a);
