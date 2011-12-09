@@ -57,7 +57,7 @@ TSHIM(structstat64__internal) {
     long __st_ctime;
     unsigned long st_ctimensec;
 #if __WORDSIZE == 64
-    long int __unused[3];
+    long int __pad3[3];
 #else
     uint64_t st_ino;
 #endif
