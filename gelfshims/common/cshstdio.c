@@ -11,6 +11,7 @@ TSHIM_NEW_D(FILE) {
     TSHIM(FILE) *ret;
     SF(ret, calloc, NULL, (sizeof(TSHIM(FILE)) + 256, 1)); /* padded for weird OSes */
     ret->hf = NULL;
+    return ret;
 }
 
 TSHIM_DELETE_D(FILE) {

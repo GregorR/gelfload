@@ -11,6 +11,7 @@ TSHIM_NEW_D(DIR) {
     TSHIM(DIR) *ret;
     SF(ret, calloc, NULL, (sizeof(TSHIM(DIR)) + 256, 1)); /* padded for weird OSes */
     ret->hf = NULL;
+    return ret;
 }
 
 TSHIM_DELETE_D(DIR) {
