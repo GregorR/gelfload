@@ -36,7 +36,6 @@ int SHIM(linkat)(int olddirfd, const char *oldpath,
 
     actualpath = alloca(path_max + 1);
 
-    /* not all platforms provide fstatat, so chdir */
     curdir = open(".", O_RDONLY);
     if (curdir < 0) {
         /* failed to get the current directory */
@@ -47,6 +46,50 @@ int SHIM(linkat)(int olddirfd, const char *oldpath,
         if (fchdir(olddirfd) >= 0 && realpath(oldpath, actualpath) &&
             fchdir(newdirfd) >= 0) {
             ret = link(actualpath, newpath);
+        } else {
+            ret = -1;
+        }
+        fchdir(curdir);
+        close(curdir);
+    }
+    return ret;
+}
+
+int SHIM(faccessat)(int dirfd, const char *pathname, int mode, int flags)
+{
+    /* FIXME: flags ignored */
+    int ret, curdir;
+
+    curdir = open(".", O_RDONLY);
+    if (curdir < 0) {
+        /* failed to get the current directory */
+        ret = -1;
+    } else {
+        if (dirfd < 0) dirfd = curdir;
+        if (fchdir(dirfd) >= 0) {
+            ret = access(pathname, mode);
+        } else {
+            ret = -1;
+        }
+        fchdir(curdir);
+        close(curdir);
+    }
+    return ret;
+}
+
+int SHIM(unlinkat)(int dirfd, const char *pathname, int flags)
+{
+    /* FIXME: flags ignored */
+    int ret, curdir;
+
+    curdir = open(".", O_RDONLY);
+    if (curdir < 0) {
+        /* failed to get the current directory */
+        ret = -1;
+    } else {
+        if (dirfd < 0) dirfd = curdir;
+        if (fchdir(dirfd) >= 0) {
+            ret = unlink(pathname);
         } else {
             ret = -1;
         }

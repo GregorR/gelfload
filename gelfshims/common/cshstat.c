@@ -78,6 +78,7 @@ int SHIM2(STAT(fstatat))(int a, const char *b, TSHIM2(STAT(structstat)) *c, int 
         /* failed to get the current directory */
         ret = -1;
     } else {
+        if (a < 0) a = curdir;
         if (fchdir(a) >= 0) {
             if (d) {
                 /* FIXME: assume AT_SYMLINK_NOFOLLOW */

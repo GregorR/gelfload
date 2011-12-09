@@ -85,3 +85,9 @@ int SHIM(__lxstat64)(int ver, const char *path, TSHIM(structstat64__internal) *b
     VERCHECK;
     return SHIM2(STAT(lstat))(path, buf);
 }
+
+int SHIM(__fxstatat64)(int ver, int dirfd, const char *pathname, TSHIM(structstat64__internal) *buf, int flags)
+{
+    VERCHECK;
+    return SHIM2(STAT(fstatat))(dirfd, pathname, buf, flags);
+}

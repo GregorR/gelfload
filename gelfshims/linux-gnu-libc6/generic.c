@@ -38,6 +38,7 @@ UNIMPL_SHIM(readlinkat);
 UNIMPL_SHIM(rpmatch);
 UNIMPL_SHIM(lseek64);
 UNIMPL_SHIM(fdopendir);
+UNIMPL_SHIM(openat64);
 
 /*
 UNIMPL_SHIM(dirfd);
