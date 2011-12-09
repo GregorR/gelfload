@@ -39,6 +39,8 @@ UNIMPL_SHIM(rpmatch);
 UNIMPL_SHIM(lseek64);
 UNIMPL_SHIM(fdopendir);
 UNIMPL_SHIM(openat64);
+UNIMPL_SHIM(utimensat);
+UNIMPL_SHIM(futimesat);
 
 /*
 UNIMPL_SHIM(dirfd);
