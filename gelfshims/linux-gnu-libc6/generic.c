@@ -41,6 +41,17 @@ UNIMPL_SHIM(fdopendir);
 UNIMPL_SHIM(openat64);
 UNIMPL_SHIM(utimensat);
 UNIMPL_SHIM(futimesat);
+UNIMPL_SHIM(__xstat);
+UNIMPL_SHIM(isastream);
+UNIMPL_SHIM(setresuid);
+UNIMPL_SHIM(setresgid);
+UNIMPL_SHIM(epoll_ctl);
+UNIMPL_SHIM(getutid);
+UNIMPL_SHIM(epoll_wait);
+UNIMPL_SHIM(endutent);
+UNIMPL_SHIM(updwtmp);
+UNIMPL_SHIM(setutent);
+UNIMPL_SHIM(pututline);
 
 /*
 UNIMPL_SHIM(dirfd);

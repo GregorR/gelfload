@@ -2,6 +2,7 @@ TARGET=linux-gnu-libc6
 OBJS=\
 ctype.o \
 environ.o \
+epoll.o \
 errno.o \
 error.o \
 generic.o \

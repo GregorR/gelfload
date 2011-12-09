@@ -98,3 +98,8 @@ int SHIM(unlinkat)(int dirfd, const char *pathname, int flags)
     }
     return ret;
 }
+
+int SHIM(getpt)()
+{
+    return posix_openpt(O_RDWR|O_NOCTTY);
+}
