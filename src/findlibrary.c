@@ -80,6 +80,7 @@ char *findLibrary(const char *metanm)
     /* 'core' libs are hardwired */
     if (!strncmp(metanm, "ld", 2) ||
         !strncmp(metanm, "libc.so.", 8) ||
+        !strncmp(metanm, "libm.so.", 8) ||
         !strncmp(metanm, "libintl.so.", 11) ||
         !strncmp(metanm, "libiconv.so.", 12) ||
         !strncmp(metanm, "libsocket.so.", 13) ||
