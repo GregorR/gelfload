@@ -53,6 +53,10 @@ UNIMPL_SHIM(endutent)
 UNIMPL_SHIM(updwtmp)
 UNIMPL_SHIM(setutent)
 UNIMPL_SHIM(pututline)
+UNIMPL_SHIM(getresgid)
+UNIMPL_SHIM(getresuid)
+UNIMPL_SHIM(_IO_getc)
+UNIMPL_SHIM(__fxstat)
 
 /*
 UNIMPL_SHIM(dirfd);

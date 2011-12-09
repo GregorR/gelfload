@@ -1,1 +1,1 @@
-struct core {int core;};
+struct core;
