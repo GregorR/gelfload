@@ -33,6 +33,11 @@ UNIMPL_SHIM(mkstemp64);
 UNIMPL_SHIM(mmap64);
 UNIMPL_SHIM(getrlimit64);
 UNIMPL_SHIM(__strndup);
+UNIMPL_SHIM(__freading);
+UNIMPL_SHIM(readlinkat);
+UNIMPL_SHIM(rpmatch);
+UNIMPL_SHIM(lseek64);
+UNIMPL_SHIM(fdopendir);
 
 /*
 UNIMPL_SHIM(dirfd);
