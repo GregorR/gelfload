@@ -1,6 +1,7 @@
 /* arbitrary GNU-specific functions */
 #include <alloca.h>
 #include <fcntl.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/param.h>
@@ -41,6 +42,8 @@ int SHIM(linkat)(int olddirfd, const char *oldpath,
         /* failed to get the current directory */
         ret = -1;
     } else {
+        if (olddirfd < 0) olddirfd = curdir;
+        if (newdirfd < 0) newdirfd = curdir;
         if (fchdir(olddirfd) >= 0 && realpath(oldpath, actualpath) &&
             fchdir(newdirfd) >= 0) {
             ret = link(actualpath, newpath);
@@ -52,4 +55,3 @@ int SHIM(linkat)(int olddirfd, const char *oldpath,
     }
     return ret;
 }
-
