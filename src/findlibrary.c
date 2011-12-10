@@ -86,7 +86,8 @@ char *findLibrary(const char *metanm)
         !strncmp(metanm, "libiconv.so.", 12) ||
         !strncmp(metanm, "libsocket.so.", 13) ||
         !strncmp(metanm, "libgen.so.", 10) ||
-        !strncmp(metanm, "librt.so.", 9)) {
+        !strncmp(metanm, "librt.so.", 9) ||
+        !strncmp(metanm, "libcrypt.so.", 12)) {
         foundlib = findLibrary("libgelfload-host-core.so");
     } else {
 

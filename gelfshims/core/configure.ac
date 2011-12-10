@@ -16,14 +16,7 @@ AC_PROG_CC
 AC_CHECK_LIB([m], [sin])
 AC_CHECK_LIB([iconv], [iconv])
 AC_CHECK_LIB([rt], [clock_gettime])
-
-#for ldlib in /lib/ld*.so*; do
-#    LD_LIBS="$LIBS"
-#    LIBS="$LIBS $ldlib"; export LIBS
-#    AC_CHECK_LIB([c], [open], [true], [
-#        LIBS="$LD_LIBS"; export LIBS
-#    ])
-#done
+AC_CHECK_LIB([crypt], [crypt])
 
 # Checks for header files.
 
