@@ -152,6 +152,13 @@ int SHIM(putc)(int a, TSHIM(FILE) *b)
     return putc(a, hb);
 }
 
+int SHIM(getc)(TSHIM(FILE) *a)
+{
+    FILE *ha;
+    TSHIM_T2H(FILE)(&ha, &a);
+    return getc(ha);
+}
+
 size_t SHIM(fwrite)(const void *a, size_t b, size_t c, TSHIM(FILE) *d)
 {
     FILE *hd;

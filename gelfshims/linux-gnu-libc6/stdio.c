@@ -9,6 +9,7 @@
 #include "shstdio.h"
 
 int SHIM(putc)(int a, TSHIM(FILE) *b);
+int SHIM(getc)(TSHIM(FILE) *a);
 ssize_t SHIM(getdelim)(char **a, size_t *b, int c, TSHIM(FILE) *d);
 
 /* stdin/stdout/stderr are just globals */
@@ -62,6 +63,11 @@ int SHIM(__uflow)(TSHIM(FILE) *a)
 int SHIM(_IO_putc)(int a, TSHIM(FILE) *b)
 {
     return SHIM(putc)(a, b);
+}
+
+int SHIM(_IO_getc)(TSHIM(FILE) *a)
+{
+    return SHIM(getc)(a);
 }
 
 int SHIM(__getdelim)(char **a, size_t *b, int c, TSHIM(FILE) *d)
