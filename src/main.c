@@ -30,6 +30,7 @@ int main(int argc, char **argv, char **envp)
             }
         } else {
             progarg = i;
+            break;
         }
     }
     if (progarg == -1) {
