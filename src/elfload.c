@@ -237,7 +237,7 @@ void relocateELFs()
 {
     int i;
 
-    for (i = 0; i < elfFileCount; i++) {
+    for (i = elfFileCount - 1; i >= 0; i--) {
         relocateELF(i, &(elfFiles[i]));
     }
 }
