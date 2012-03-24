@@ -63,7 +63,7 @@ int main(int argc, char **argv, char **envp)
         alloca((argc + envc + 2) * sizeof(void*));
     newstack[0] = (void*) (size_t) (argc - 1);
     for (i = progarg; i < argc; i++) {
-        newstack[i] = (void*) argv[i];
+        newstack[i - progarg + 1] = (void*) argv[i];
     }
     newstack[i] = NULL;
 
