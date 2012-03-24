@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #ifdef __WIN32
 #include <malloc.h>
@@ -14,11 +15,25 @@ int main(int argc, char **argv, char **envp)
 {
     struct ELF_File *f;
     void **newstack;
-    int i, envc;
+    int i, envc, progarg;
     char *dir, *fil;
+    int maybe = 0;
 
-    if (argc < 2) {
-        fprintf(stderr, "Use: elfload <elf file> [arguments]\n");
+    progarg = -1;
+    for (i = 1; i < argc; i++) {
+        if (argv[i][0] == '-') {
+            if (!strcmp(argv[i], "-m")) {
+                maybe = 1;
+            } else if (!strcmp(argv[i], "--")) {
+                progarg = i + 1;
+                break;
+            }
+        } else {
+            progarg = i;
+        }
+    }
+    if (progarg == -1) {
+        fprintf(stderr, "Use: elfload [-m] <elf file> [arguments]\n");
         return 1;
     }
 
@@ -26,7 +41,14 @@ int main(int argc, char **argv, char **envp)
     elfload_dlinstdir = dir;
 
     /* load them all in */
-    f = loadELF(argv[1], dir);
+    f = loadELF(argv[progarg], dir, maybe);
+
+    if (!f) {
+        /* try just execing it */
+        execv(argv[progarg], argv + progarg);
+        fprintf(stderr, "Failed to load %s.\n", argv[progarg]);
+        return 1;
+    }
 
     /* relocate them */
     relocateELFs();
@@ -39,7 +61,7 @@ int main(int argc, char **argv, char **envp)
     newstack = (void**)
         alloca((argc + envc + 2) * sizeof(void*));
     newstack[0] = (void*) (size_t) (argc - 1);
-    for (i = 1; i < argc; i++) {
+    for (i = progarg; i < argc; i++) {
         newstack[i] = (void*) argv[i];
     }
     newstack[i] = NULL;

@@ -38,7 +38,7 @@ struct ELF_File elfFiles[MAX_ELF_FILES];
 int elfFileCount = 0;
 
 /* The function to actually load ELF files into memory */
-struct ELF_File *loadELF(const char *nm, const char *instdir)
+struct ELF_File *loadELF(const char *nm, const char *instdir, int maybe)
 {
     int i, fileNo, phdri;
     struct ELF_File *f;
@@ -113,15 +113,23 @@ struct ELF_File *loadELF(const char *nm, const char *instdir)
     /* make sure it's an ELF file */
     f->ehdr = (ElfNative_Ehdr *) f->prog;
     if (memcmp(f->ehdr->e_ident, ELFMAG, SELFMAG) != 0) {
-        fprintf(stderr, "%s does not appear to be an ELF file.\n", nm);
-        exit(1);
+        if (!maybe) {
+            fprintf(stderr, "%s does not appear to be an ELF file.\n", nm);
+            exit(1);
+        } else {
+            return NULL;
+        }
     }
 
     /* only native-bit supported for the moment */
     if ((SIZEOF_VOID_P == 4 && f->ehdr->e_ident[EI_CLASS] != ELFCLASS32) ||
         (SIZEOF_VOID_P == 8 && f->ehdr->e_ident[EI_CLASS] != ELFCLASS64)) {
-        fprintf(stderr, "%s is not a %d-bit ELF file.\n", nm, SIZEOF_VOID_P * 8);
-        exit(1);
+        if (!maybe) {
+            fprintf(stderr, "%s is not a %d-bit ELF file.\n", nm, SIZEOF_VOID_P * 8);
+            exit(1);
+        } else {
+            return NULL;
+        }
     }
 
     /* FIXME: check endianness */
@@ -129,8 +137,12 @@ struct ELF_File *loadELF(const char *nm, const char *instdir)
     /* must be an executable or .so to be loaded */
     if (f->ehdr->e_type != ET_EXEC &&
         f->ehdr->e_type != ET_DYN) {
-        fprintf(stderr, "%s is not an executable or shared object file.\n", nm);
-        exit(1);
+        if (!maybe) {
+            fprintf(stderr, "%s is not an executable or shared object file.\n", nm);
+            exit(1);
+        } else {
+            return NULL;
+        }
     }
 
     /* now go through program headers, to find the allocation space of this file */
@@ -151,6 +163,14 @@ struct ELF_File *loadELF(const char *nm, const char *instdir)
             if ((void *) curphdr->p_vaddr + curphdr->p_memsz > f->max) {
                 f->max = (void *) curphdr->p_vaddr + curphdr->p_memsz;
             }
+
+        } else if (maybe && curphdr->p_type == PT_INTERP) {
+            /* if we're only maybe-loading, check the loader */
+            if (strcmp((char *) (f->prog + curphdr->p_offset), "/usr/bin/gelfload-ld")) {
+                /* wrong loader! */
+                return NULL;
+            }
+
         }
     }
 
@@ -226,7 +246,7 @@ struct ELF_File *loadELF(const char *nm, const char *instdir)
     /* load in dependencies */
     for (curdyn = f->dynamic; curdyn && curdyn->d_tag != DT_NULL; curdyn++) {
         if (curdyn->d_tag == DT_NEEDED) {
-            loadELF(f->strtab + curdyn->d_un.d_val, instdir);
+            loadELF(f->strtab + curdyn->d_un.d_val, instdir, 0);
         }
     }
 
