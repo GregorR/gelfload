@@ -462,7 +462,12 @@ void *findELFSymbol(const char *nm, struct ELF_File *onlyin, int localin, int no
 
         /* if this is a host library, just try the host method */
         if (f->hostlib == HOSTLIB_HOST) {
+            char lsym[1024];
+            snprintf(lsym, 1024, "gelfload__%s", nm);
+
 #if defined(HAVE_DLFCN_H)
+            hostsym = dlsym(f->prog, lsym);
+            if (hostsym) return hostsym;
             hostsym = dlsym(f->prog, nm);
             if (hostsym) return hostsym;
             continue;
@@ -474,14 +479,20 @@ void *findELFSymbol(const char *nm, struct ELF_File *onlyin, int localin, int no
             if (strncmp(nm, "_imp__", 6) == 0) {
                 isimp = 1;
                 nm += 6;
+                snprintf(lsym, 1024, "gelfload__%s", nm);
             }
 
             /* Try adding a _ first, to get the cdecl version */
-            snprintf(csym, 1024, "_%s", nm);
+            snprintf(csym, 1024, "_%s", lsym);
             hostsym = GetProcAddress(f->prog, csym);
+            if (hostsym == NULL)
+                hostsym = GetProcAddress(f->prog, lsym);
             if (hostsym == NULL) {
-                hostsym = GetProcAddress(f->prog, nm);
+                snprintf(csym, 1024, "_%s", nm);
+                hostsym = GetProcAddress(f->proc, csym);
             }
+            if (hostsym == NULL)
+                hostsym = GetProcAddress(f->prog, nm);
             if (hostsym) {
                 if (isimp) {
                     /* Need a pointer to this pointer */
