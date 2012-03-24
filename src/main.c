@@ -61,11 +61,11 @@ int main(int argc, char **argv, char **envp)
     for (envc = 0; envp[envc]; envc++);
     newstack = (void**)
         alloca((argc + envc + 2) * sizeof(void*));
-    newstack[0] = (void*) (size_t) (argc - 1);
+    newstack[0] = (void*) (size_t) (argc - progarg);
     for (i = progarg; i < argc; i++) {
         newstack[i - progarg + 1] = (void*) argv[i];
     }
-    newstack[i] = NULL;
+    newstack[i - progarg + 1] = NULL;
 
     for (i = 0; i < envc; i++) {
         newstack[i+argc+1] = (void*) envp[i];
