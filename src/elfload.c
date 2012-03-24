@@ -296,7 +296,7 @@ void relocateELF(int fileNo, struct ELF_File *f)
                 }
 
                 case R_386_GLOB_DAT:
-                    WORD32_REL(REL_S + REL_A);
+                    WORD32_REL(f->loc + REL_A);
                     break;
 
                 case R_386_RELATIVE:
@@ -367,7 +367,7 @@ void relocateELF(int fileNo, struct ELF_File *f)
                 }
 
                 case R_X86_64_GLOB_DAT:
-                    WORD64_REL(REL_S + REL_A);
+                    WORD64_REL(f->loc + REL_A);
                     break;
 
                 case R_X86_64_RELATIVE:
