@@ -12,12 +12,13 @@
 /* mmap-based is the easiest */
 void *bbuffer(void *loc, size_t sz) {
     void *ret;
+    int page = getpagesize();
 
     /* switch on fixed-ness */
     if (loc) {
         /* make sure it's on a page boundary */
         ssize_t offset;
-        offset = (ssize_t) loc % 4096;
+        offset = (ssize_t) loc % page;
         if (offset) {
             sz += offset;
             loc -= offset;
@@ -30,7 +31,7 @@ void *bbuffer(void *loc, size_t sz) {
                    -1, 0);
     }
 
-    if (ret == NULL) {
+    if (ret == (void *) -1) {
         perror("mmap");
         exit(1);
     }
