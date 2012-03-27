@@ -68,9 +68,9 @@ int main(int argc, char **argv, char **envp)
     newstack[i - progarg + 1] = NULL;
 
     for (i = 0; i < envc; i++) {
-        newstack[i+argc+1] = (void*) envp[i];
+        newstack[i-progarg+argc+2] = (void*) envp[i];
     }
-    newstack[i+argc+1] = NULL;
+    newstack[i-progarg+argc+2] = NULL;
 
     /* and call it */
     WITHSTACK_JMP(newstack, f->ehdr->e_entry + f->offset);
