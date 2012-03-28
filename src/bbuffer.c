@@ -17,6 +17,7 @@ void *bbuffer(void *loc, size_t sz) {
     /* switch on fixed-ness */
     if (loc) {
         /* make sure it's on a page boundary */
+        void *wantloc = loc;
         ssize_t offset;
         offset = (ssize_t) loc % page;
         if (offset) {
@@ -26,6 +27,7 @@ void *bbuffer(void *loc, size_t sz) {
 
         ret = mmap(loc, sz, PROT_EXEC|PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON|MAP_FIXED,
                    -1, 0);
+        if (ret == loc) ret = wantloc;
     } else {
         ret = mmap(NULL, sz, PROT_EXEC|PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON,
                    -1, 0);
