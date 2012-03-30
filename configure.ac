@@ -1,7 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ(2.5)
+AC_PREREQ(2.50)
 AC_INIT([gelfload], [1], [cdgregorr@sourceforge.net])
 AC_CONFIG_SRCDIR([src/elfload.h])
 AC_CONFIG_HEADER([config.h])
@@ -28,12 +28,12 @@ AM_CONDITIONAL(HAVE_LIBDL, test "x$HAVE_LIBDL" = "xtrue")
 ORIG_LDFLAGS="$LDFLAGS"
 LDFLAGS="$LDFLAGS -Wl,--image-base,0x18000000"
 export LDFLAGS
-AC_LINK_IFELSE(AC_LANG_PROGRAM([], []), [], [
+AC_LINK_IFELSE([AC_LANG_PROGRAM([], [])], [], [
     # OK, try with --section-start. This test comes second because MingW allows
     # it, though it doesn't work
     LDFLAGS="$ORIG_LDFLAGS -Wl,--section-start,.dynsym=0x19000000 -Wl,--section-start,.hash=0x18000000"
     export LDFLAGS
-    AC_LINK_IFELSE(AC_LANG_PROGRAM([], []), [], [
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([], [])], [], [
         # Too bad, this can't be done
         LDFLAGS="$ORIG_LDFLAGS"
         export LDFLAGS
@@ -41,24 +41,15 @@ AC_LINK_IFELSE(AC_LANG_PROGRAM([], []), [], [
 ])
 
 # Checks for header files.
-AC_HEADER_STDC
-AC_CHECK_HEADERS([dlfcn.h fcntl.h stdint.h stdlib.h string.h unistd.h])
+AC_CHECK_HEADERS([dlfcn.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
-AC_C_CONST
-AC_TYPE_INT32_T
-AC_TYPE_INT64_T
-AC_TYPE_SIZE_T
-AC_TYPE_SSIZE_T
-AC_TYPE_UINT16_T
-AC_TYPE_UINT32_T
-AC_TYPE_UINT64_T
 AC_COMPILE_CHECK_SIZEOF([void *])
 
 # -static
 ORIG_LDFLAGS="$LDFLAGS"
 LDFLAGS="$LDFLAGS -static"
-AC_LINK_IFELSE([int main(void) {return 0;}], [
+AC_LINK_IFELSE([AC_LANG_PROGRAM([], [])], [
     HAVE_STATIC=yes
 ], [
     HAVE_STATIC=no
@@ -67,11 +58,7 @@ LDFLAGS="$ORIG_LDFLAGS"
 AM_CONDITIONAL(HAVE_STATIC, test x$HAVE_STATIC = xyes)
 
 # Checks for library functions.
-#AC_FUNC_ALLOCA
-#AC_FUNC_MALLOC
-AC_FUNC_MEMCMP
 AC_FUNC_MMAP
-AC_CHECK_FUNCS([memset strdup])
 
 # Prefix for elfload-ld.c to know where the main program is:
 AC_DEFINE_UNQUOTED([PREFIX], ["$prefix"], [Install prefix])
