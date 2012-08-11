@@ -73,7 +73,20 @@ struct ELF_File *loadELF(const char *nm, const char *instdir, int maybe)
             f->prog = dlopen(nm + 8, RTLD_NOW|RTLD_GLOBAL);
 
             if (f->prog == NULL) {
-                fprintf(stderr, "Could not resolve host library %s: %s.\n", nm + 8, dlerror());
+                /* try with an explicit path */
+                char *fullpath;
+                fullpath = malloc(strlen(elfload_dlinstdir) + strlen(nm) + 1);
+                if (fullpath == NULL) {
+                    perror("malloc");
+                    exit(1);
+                }
+                sprintf(fullpath, "%s/../lib/%s", elfload_dlinstdir, nm + 8);
+                f->prog = dlopen(fullpath, RTLD_NOW|RTLD_GLOBAL);
+                free(fullpath);
+            }
+
+            if (f->prog == NULL) {
+                fprintf(stderr, "Could not resolve host library %s.\n", nm + 8);
                 exit(1);
             }
         }
