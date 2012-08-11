@@ -6,7 +6,7 @@ gelfload_SOURCES = main.c whereami.c
 gelfload_DEPENDENCIES = libgelfload.a
 gelfload_LDADD = libgelfload.a
 
-gelfload_ld_SOURCES = elfload-ld.c
+gelfload_ld_SOURCES = elfload-ld.c whereami.c
 if HAVE_STATIC
     gelfload_ld_LDFLAGS = -static
 endif
