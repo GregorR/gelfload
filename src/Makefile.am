@@ -6,7 +6,7 @@ microcosm_SOURCES = main.c whereami.c
 microcosm_DEPENDENCIES = libgelfload.a
 microcosm_LDADD = libgelfload.a
 
-microcosm_ld_SOURCES = elfload-ld.c
+microcosm_ld_SOURCES = elfload-ld.c whereami.c
 if HAVE_STATIC
     microcosm_ld_LDFLAGS = -static
 endif
