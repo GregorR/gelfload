@@ -86,7 +86,7 @@ struct ELF_File *loadELF(const char *nm, const char *instdir, int maybe)
             }
 
             if (f->prog == NULL) {
-                fprintf(stderr, "Could not resolve host library %s.\n", nm + 8);
+                fprintf(stderr, "Could not resolve host library %s: %s.\n", nm + 8, dlerror());
                 exit(1);
             }
         }
