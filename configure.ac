@@ -34,9 +34,15 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([], [])], [], [
     LDFLAGS="$ORIG_LDFLAGS -Wl,--section-start,.dynsym=0x19000000 -Wl,--section-start,.hash=0x18000000"
     export LDFLAGS
     AC_LINK_IFELSE([AC_LANG_PROGRAM([], [])], [], [
-        # Too bad, this can't be done
-        LDFLAGS="$ORIG_LDFLAGS"
+        # Maybe we're using a Solaris-style linker, let's try a map file
+        srcdir_absolute=`cd "$srcdir" && pwd`
+        LDFLAGS="$ORIG_LDFLAGS -Wl,-M$srcdir_absolute/scripts/0x18000000.solaris.map"
         export LDFLAGS
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([], [])], [], [
+            # Too bad, this can't be done
+            LDFLAGS="$ORIG_LDFLAGS"
+            export LDFLAGS
+        ])
     ])
 ])
 
