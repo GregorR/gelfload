@@ -1,7 +1,7 @@
 /* From a loader, pop off our entire stack and execute the loaded program */
 
 /*
- * Copyright (c) 2007  Gregor Richards
+ * Copyright (c) 2007, 2012  Gregor Richards
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -19,14 +19,16 @@
  * IN THE SOFTWARE.
  */
 
-#if defined(__i386__)
+#include "config.h"
+
+#if GELFLOAD_ARCH_i386
 #define WITHSTACK_JMP(newstack, newloc) \
     asm("mov %0, %%esp\n" \
         "jmp *%1\n" \
         : \
         : "r"(newstack), "r"(newloc));
 
-#elif defined(__x86_64__)
+#elif GELFLOAD_ARCH_x86_64
 #define WITHSTACK_JMP(newstack, newloc) \
     asm("mov %0, %%rsp\n" \
         "jmp *%1\n" \

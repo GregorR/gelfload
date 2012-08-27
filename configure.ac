@@ -1,7 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ(2.50)
+AC_PREREQ(2.60)
 AC_INIT([gelfload], [1], [cdgregorr@sourceforge.net])
 AC_CONFIG_SRCDIR([src/elfload.h])
 AC_CONFIG_HEADER([config.h])
@@ -14,6 +14,7 @@ m4_include([scripts/ac_compile_check_sizeof.ac])
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_RANLIB
+AC_PROG_LN_S
 
 # Checks for libraries.
 AC_CHECK_LIB([dl], [dlopen], [
@@ -62,6 +63,27 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([], [])], [
 ])
 LDFLAGS="$ORIG_LDFLAGS"
 AM_CONDITIONAL(HAVE_STATIC, test x$HAVE_STATIC = xyes)
+
+# architecture
+AC_LANG([C])
+AC_DEFUN([ACX_ARCH_CHECK], [
+    AC_COMPILE_IFELSE([
+        AC_LANG_PROGRAM([
+#if !($1)
+        @syntax_error@
+#endif
+        ], [])
+    ], [
+        AC_SUBST([GELFLOAD_ARCH], [$2])
+        AC_DEFINE([GELFLOAD_ARCH_[]$2], [1], [Define if architecture is $2.])
+    ], [$3])
+])
+
+ACX_ARCH_CHECK([defined(__x86_64__) || defined(__x86_64) || defined(_M_X64)],
+    [x86_64], [
+    ACX_ARCH_CHECK([defined(__i386__) || defined(__i386) || defined(_M_IX86)],
+        [i386])
+])
 
 # Checks for library functions.
 AC_FUNC_MMAP
