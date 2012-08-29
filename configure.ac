@@ -5,11 +5,10 @@ AC_PREREQ(2.50)
 AC_INIT([gelfload], [1], [cdgregorr@sourceforge.net])
 AC_CONFIG_SRCDIR([src/elfload.h])
 AC_CONFIG_HEADER([config.h])
-
 AC_CONFIG_AUX_DIR([scripts])
-AM_INIT_AUTOMAKE()
 
-m4_include([scripts/ac_compile_check_sizeof.ac])
+m4_include([scripts/lean.m4])
+AM_INIT_AUTOMAKE
 
 # Checks for programs.
 AC_PROG_CC
@@ -50,7 +49,7 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([], [])], [], [
 AC_CHECK_HEADERS([dlfcn.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
-AC_COMPILE_CHECK_SIZEOF([void *])
+AC_CHECK_SIZEOF([void *])
 
 # -static
 ORIG_LDFLAGS="$LDFLAGS"
@@ -64,7 +63,7 @@ LDFLAGS="$ORIG_LDFLAGS"
 AM_CONDITIONAL(HAVE_STATIC, test x$HAVE_STATIC = xyes)
 
 # Checks for library functions.
-AC_FUNC_MMAP
+AC_CHECK_FUNCS([mmap])
 
 # Prefix for elfload-ld.c to know where the main program is:
 AC_DEFINE_UNQUOTED([PREFIX], ["$prefix"], [Install prefix])
