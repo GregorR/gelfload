@@ -283,8 +283,7 @@ void relocateELFs()
 void relocateELF(int fileNo, struct ELF_File *f)
 {
     /* do processor-specific relocation */
-#if (defined(__i386__) || defined(__i386) || defined(_M_IX86) || defined(_X86_)) && \
-    !(defined(__x86_64__) || defined(_M_X64))
+#if GELFLOAD_ARCH_i386
 #define REL_P ((ssize_t) (currel->r_offset + f->offset))
 #define REL_S ((ssize_t) (findELFSymbol( \
                 f->strtab + f->symtab[ELFNATIVE_R_SYM(currel->r_info)].st_name, \
@@ -354,7 +353,7 @@ void relocateELF(int fileNo, struct ELF_File *f)
     }
 
 
-#elif defined(__x86_64__) || defined(_M_X64)
+#elif GELFLOAD_ARCH_x86_64
 #define REL_P ((ssize_t) (currel->r_offset + f->offset))
 #define REL_S ((ssize_t) (findELFSymbol( \
                 f->strtab + f->symtab[ELFNATIVE_R_SYM(currel->r_info)].st_name, \
